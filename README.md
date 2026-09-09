@@ -91,6 +91,7 @@ Two things worth knowing about how it behaves:
 | `start-avery-plan.cmd` | What the desktop shortcut runs |
 | `make-icon.py` | Regenerates `avery.ico` |
 | `plan-state.json` | Your answers |
+| `CLAUDE.md` | Notes for Claude Code, if you ask it to change something |
 
 After editing `avery-plan.html`:
 
@@ -100,6 +101,26 @@ python build-local.py
 
 Then refresh the browser. To share the updated page on claude.ai as well, ask
 Claude to republish it.
+
+---
+
+## The code, on GitHub
+
+The code lives at **github.com/WeeYingxian/avery**, and the repository is
+private. This folder is already connected to it, so once a change is made:
+
+```bash
+git add -A && git commit -m "what changed" && git push
+```
+
+**Your answers are deliberately not in it.** `plan-state.json`, its
+before-merge snapshot and the generated `index.html` are all ignored, so
+nothing you write on the board or in the notes ever leaves this computer.
+The repository is the code only.
+
+That also means cloning it somewhere else gives you an empty plan, not a copy
+of this one. To move your answers, use **Back up a copy** under **Share &
+storage** and carry the file across.
 
 ---
 
