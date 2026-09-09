@@ -3,9 +3,6 @@ plan-state.json
 plan-state.json.tmp
 plan-state.before-merge.json
 
-# Built from avery-plan.html by build-local.py; the start script rebuilds it.
-index.html
-
 # Local tooling
 .claude/
 __pycache__/

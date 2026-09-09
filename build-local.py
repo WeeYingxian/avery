@@ -14,8 +14,8 @@ HEAD = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" href="/avery.ico" sizes="any">
-<link rel="apple-touch-icon" href="/avery.ico">
+<link rel="icon" href="avery.ico" sizes="any">
+<link rel="apple-touch-icon" href="avery.ico">
 <style>
   :root{color-scheme:light dark}
   body{margin:0}

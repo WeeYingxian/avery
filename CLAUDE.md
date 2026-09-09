@@ -8,7 +8,9 @@ one wrapper script.
 ## The one rule that matters
 
 `avery-plan.html` is the source. `index.html` is generated from it and gets
-overwritten. **Never edit `index.html`.**
+overwritten. **Never edit `index.html` directly.** Commit the rebuilt copy
+alongside the source: GitHub Pages serves it from `main` at
+https://weeyingxian.github.io/avery/. Keep `.nojekyll` so Pages serves the static app.
 
 After any change to the source:
 
@@ -36,7 +38,7 @@ PATH; the real interpreter is `%USERPROFILE%\anaconda3\python.exe`.
 `plan-state.json` holds the couple's actual answers: decisions, notes, ticks.
 It is real data, not fixtures. Do not edit it, and be careful driving the UI in
 a browser, because **every click writes to it**. It is gitignored, along with
-`index.html` and `plan-state.before-merge.json`.
+`plan-state.before-merge.json`.
 
 ## Verifying changes
 

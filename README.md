@@ -20,7 +20,8 @@ open** — closing it stops the server and stops Wi-Fi sharing.
 |---|---|
 | This computer | http://localhost:4173 |
 | Anyone on your Wi-Fi | Use the **Share & storage** button in the page header |
-| From anywhere | https://claude.ai/code/artifact/e5010090-aec9-474e-a239-d172817c2bec |
+| GitHub Pages | https://weeyingxian.github.io/avery/ |
+| Claude artifact | https://claude.ai/code/artifact/e5010090-aec9-474e-a239-d172817c2bec |
 
 The Wi-Fi address changes when your router reassigns it, which is why the
 Share button reads it live instead of hard-coding it. Don't write it down.
@@ -42,6 +43,10 @@ shared rather than two separate copies.
 
 It lives in OneDrive, so it is backed up automatically and you can right-click
 → **Version history** to recover an earlier state.
+
+GitHub Pages serves the app as a static website. Choices there are saved only
+in that browser on that device; they do not sync with the local server or
+other devices. Use **Back up a copy** and **Restore from a backup** to transfer them.
 
 The published link on claude.ai keeps its own separate copy on Claude's
 servers, so it works away from home but does not sync with this file. Pick one
@@ -99,7 +104,9 @@ After editing `avery-plan.html`:
 python build-local.py
 ```
 
-Then refresh the browser. To share the updated page on claude.ai as well, ask
+Then refresh the browser. Commit both `avery-plan.html` and the rebuilt
+`index.html` and push to `main` to update GitHub Pages. `.nojekyll` makes Pages
+serve these static files directly. To share the updated page on claude.ai as well, ask
 Claude to republish it.
 
 ---
@@ -114,7 +121,7 @@ git add -A && git commit -m "what changed" && git push
 ```
 
 **Your answers are deliberately not in it.** `plan-state.json`, its
-before-merge snapshot and the generated `index.html` are all ignored, so
+before-merge snapshot are ignored, so
 nothing you write on the board or in the notes ever leaves this computer.
 The repository is the code only.
 
