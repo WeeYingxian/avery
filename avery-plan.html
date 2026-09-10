@@ -1677,6 +1677,22 @@ async function initStore(){
     return;
   }
 
+  /* The published snapshot seeds an empty browser once. Existing answers,
+     including edits made while this request is in flight, take precedence. */
+  const emptyPlan=()=>KEYS.every(k=>Object.keys(S[k]||{}).length===0);
+  if(emptyPlan()){
+    try{
+      const response=await fetch("initial-plan.json",{cache:"no-store"});
+      if(response.ok){
+        const initial=await response.json();
+        const valid=KEYS.every(k=>initial[k]&&typeof initial[k]==="object"&&!Array.isArray(initial[k]));
+        if(valid&&emptyPlan()){
+          KEYS.forEach(k=>{S[k]=initial[k]; lsSet(k,S[k])});
+          emit();
+        }
+      }
+    }catch(e){ /* The plan remains usable offline or without a snapshot. */ }
+  }
   setSync("local","saved in this browser only");
   window.addEventListener("storage",e=>{
     if(e.key&&e.key.indexOf("avery:")===0){ KEYS.forEach(k=>{S[k]=lsGet(k)}); emit(); }

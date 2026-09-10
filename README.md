@@ -44,9 +44,12 @@ shared rather than two separate copies.
 It lives in OneDrive, so it is backed up automatically and you can right-click
 → **Version history** to recover an earlier state.
 
-GitHub Pages serves the app as a static website. Choices there are saved only
-in that browser on that device; they do not sync with the local server or
-other devices. Use **Back up a copy** and **Restore from a backup** to transfer them.
+GitHub Pages serves the app as a static website. An empty browser starts with
+the recovered answers in `initial-plan.json`. This snapshot is committed to
+the repository and publicly accessible on the website. Existing browser
+answers are preserved. Subsequent changes save only in that browser on that
+device; they do not sync with the repository, local server, or other devices.
+Use **Back up a copy** and **Restore from a backup** to transfer later changes.
 
 The published link on claude.ai keeps its own separate copy on Claude's
 servers, so it works away from home but does not sync with this file. Pick one
@@ -120,14 +123,11 @@ private. This folder is already connected to it, so once a change is made:
 git add -A && git commit -m "what changed" && git push
 ```
 
-**Your answers are deliberately not in it.** `plan-state.json`, its
-before-merge snapshot are ignored, so
-nothing you write on the board or in the notes ever leaves this computer.
-The repository is the code only.
-
-That also means cloning it somewhere else gives you an empty plan, not a copy
-of this one. To move your answers, use **Back up a copy** under **Share &
-storage** and carry the file across.
+**The recovered answers are included in `initial-plan.json`.** This is the
+starting snapshot published to GitHub Pages. The local live `plan-state.json`
+and its before-merge snapshot remain ignored. Later edits are not pushed or
+shared automatically. To move newer answers, use **Back up a copy** under
+**Share & storage** and carry the file across.
 
 ---
 

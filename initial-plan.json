@@ -1,0 +1,175 @@
+{
+  "app": "Avery Plan",
+  "savedAt": "2026-09-10T11:49:47.433236+00:00",
+  "buys": {
+    "bouncer": {
+      "tier": "skip"
+    },
+    "bedding": {
+      "tier": "mid"
+    },
+    "stroller": {
+      "tier": "mid"
+    }
+  },
+  "checks": {
+    "a1": 1,
+    "a2": 1,
+    "a3": 1,
+    "pre7": 1
+  },
+  "settings": {
+    "hosp": 4,
+    "feedMode": "breast",
+    "care": "helper",
+    "careStart": 4,
+    "cdaDeposit": 5000,
+    "_board": {
+      "hosp": "q02|KKH Ward B2",
+      "feedMode": "q31|Breastfeed, with formula as the backup\nTo get the formula as back up",
+      "cdaDeposit": "q04|max",
+      "help": "q20|Confinement nanny, then helper.\nTo start looking for confinement nanny in second trimester.\n\nHelper start finding in third trimester.",
+      "care": "q20|Confinement nanny, then helper.\nTo start looking for confinement nanny in second trimester.\n\nHelper start finding in third trimester."
+    },
+    "help": "nanny"
+  },
+  "tasks": {
+    "q01": null,
+    "q02": {
+      "agreed": "KKH Ward B2",
+      "_open": 1,
+      "status": "agreed",
+      "_learn": 0
+    },
+    "q03": {
+      "status": "agreed",
+      "_open": 1,
+      "agreed": "Split"
+    },
+    "q04": {
+      "status": "agreed",
+      "agreed": "max",
+      "_open": 1
+    },
+    "q05": null,
+    "q07": {
+      "_learn": 1
+    },
+    "q06": {
+      "_learn": 1,
+      "picks": [],
+      "owner": "Both"
+    },
+    "q35": {
+      "status": "agreed",
+      "_open": 1,
+      "agreed": "free thinker"
+    },
+    "q24": {
+      "_open": 1,
+      "agreed": "nic's mom",
+      "status": "agreed"
+    },
+    "q51": {
+      "_open": 1,
+      "agreed": "no",
+      "status": "agreed"
+    },
+    "q52": {
+      "_open": 1,
+      "agreed": "get a car seat part of the stroller",
+      "status": "agreed"
+    },
+    "q25": {
+      "_open": 1,
+      "notes": "hospital for family",
+      "status": "agreed"
+    },
+    "q53": {
+      "status": "agreed",
+      "_why": 1,
+      "_learn": 1
+    },
+    "q20": {
+      "_learn": 1,
+      "_open": 1,
+      "notes": "To start looking for confinement nanny in second trimester.\n\nHelper start finding in third trimester. ",
+      "agreed": "Confinement nanny, then helper.",
+      "status": "parked"
+    },
+    "q10": {
+      "_open": 1,
+      "notes": "To be discussed at the second month of ML. ",
+      "status": "parked"
+    },
+    "q11": null,
+    "q21": {
+      "_learn": 1,
+      "_open": 1,
+      "notes": "To revisit when the kid is born",
+      "status": "parked"
+    },
+    "q34": {
+      "status": "agreed"
+    },
+    "q42": {
+      "_learn": 1,
+      "status": "agreed"
+    },
+    "q37": {
+      "_learn": 1,
+      "status": "parked"
+    },
+    "q22": null,
+    "q30": null,
+    "q12": {
+      "_learn": 1,
+      "owner": "Both",
+      "status": "agreed",
+      "_open": 1,
+      "agreed": "split by shifts"
+    },
+    "q13": {
+      "_open": 1,
+      "agreed": "Go for baby's vaccination together Â· Have a helper",
+      "notes": "Helper can help to do the invisible roles with Nic/YX playing the manager role. ",
+      "status": "agreed"
+    },
+    "q14": null,
+    "q15": {
+      "status": "parked",
+      "owner": "Him",
+      "_why": 1,
+      "_open": 1,
+      "_learn": 1
+    },
+    "q36": {
+      "_open": 1,
+      "notes": "At first trimester, identify possible infant care location and register early. ",
+      "status": "parked"
+    },
+    "q23": {
+      "_open": 1,
+      "notes": "Get it during KKH consultation.",
+      "status": "parked"
+    },
+    "q16": {
+      "owner": "Him",
+      "status": "parked"
+    },
+    "q32": {
+      "picks": [
+        "Decide before the birth"
+      ],
+      "status": "parked"
+    },
+    "q31": {
+      "picks": [
+        "Breastfeed, with formula as the backup"
+      ],
+      "_open": 1,
+      "notes": "To get the formula as back up",
+      "status": "agreed"
+    }
+  }
+}
