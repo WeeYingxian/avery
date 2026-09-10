@@ -42,10 +42,9 @@ a browser, because **every click writes to it**. It is gitignored, along with
 
 ## Verifying changes
 
-There is **no Node on this machine**, so the JavaScript cannot be syntax
-checked locally. The browser is the check. Load `http://localhost:4173`, hard
-reload with Ctrl+Shift+R (a hash-only navigation will not re-run the script),
-and read the console.
+Use the browser regression checks described in README.md. Run them with an
+isolated browser context; never test against the live plan-state.json or the
+user’s browser storage. The source is still built with python build-local.py.
 
 ## Layout of the source
 
@@ -69,11 +68,11 @@ in `initStore()`:
 
 ## Things that are load-bearing
 
-**The board drives the money.** A decision recorded on Talk it through updates
-the matching assumption on Money. `BOARD` maps a card id to a parser,
-`reconcileBoard()` applies it once, and `boardConflicts()` flags later drift
-with a button to restore. Do not make Money settings and board decisions
-independent again.
+**The board drives the money through explicit choices.** Relevant cards have
+Review budget choices, with a cost preview before applying. The structured
+`tasks[id].money` object drives assumptions. Never interpret free-text notes
+as budget instructions. Legacy saved assumptions are preserved until the
+user explicitly changes them. Scenario previews never save their changes.
 
 **Tasks are stage-aware.** `currentPhase()` derives the open stage from the due
 date. Later stages fold; unticked items from passed stages surface at the top

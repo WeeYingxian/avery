@@ -556,6 +556,31 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
   .mobile-cell-label{display:block; font-size:11px; font-weight:500; color:var(--muted); margin-bottom:2px}
   .stacked td:first-child .mobile-cell-label{display:none}
 }
+
+/* Planning controls */
+#planSettings summary{cursor:pointer; color:var(--muted); padding:8px 0; min-height:44px; font-size:13px}
+#planSettings{margin-bottom:12px}
+.tool-row{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:14px 0; font-size:13px}
+.tool-row label,.budget-field{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.search-label{flex:1; min-width:0}
+#planSearch{width:100%; min-width:0; min-height:44px; padding:10px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink); font-size:16px}
+#searchResults{max-height:420px; overflow-y:auto; margin-bottom:14px}
+#weekSummary{margin-top:14px}
+.week-action{display:block; width:100%; text-align:left; padding:10px 12px; margin-top:7px; border:1px solid var(--line); border-radius:9px; background:var(--surface); color:var(--ink); cursor:pointer; font:inherit; min-height:44px}
+.plan-dialog{width:min(620px,calc(100% - 24px)); max-height:85dvh; overflow:auto; padding:24px; border:1px solid var(--line); border-radius:16px; background:var(--surface); color:var(--ink); box-shadow:var(--shadow)}
+.plan-dialog::backdrop{background:rgba(0,0,0,.45)}
+.plan-dialog h2{margin-bottom:16px}
+.plan-dialog p{margin:12px 0}
+.plan-dialog label{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:10px 0}
+.plan-dialog select{max-width:100%}
+.dialog-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:20px}
+.flow-row{display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px; padding:10px 0; border-bottom:1px solid var(--line)}
+.buy-extra{display:flex; flex-wrap:wrap; gap:12px; align-items:center; padding:12px 14px; border-top:1px solid var(--line-soft); font-size:12px}
+.buy-extra label{display:flex; flex-wrap:wrap; gap:6px; align-items:center}
+.buy-extra input[type=number]{width:70px}
+.chosen-tier:not(.show-tiers) .tier[aria-pressed=false]{display:none}
+.task,.buy,.phase{scroll-margin-top:70px}
+@media(max-width:640px){.plan-dialog{padding:16px}.tool-row label{max-width:100%}.tool-row select{max-width:100%}.search-label{flex-basis:100%}.flow-row{font-size:12px}.plan-dialog input{max-width:100%}}
 </style>
 <header class="top">
   <div class="top-in">
@@ -584,13 +609,16 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
 <nav class="tabs" aria-label="Sections"><div class="tabs-in" id="tabbar" role="tablist"></div></nav>
 
 <div class="wrap">
+<div id="planTools"></div>
+<div id="storageWarning" class="callout warn" role="alert" hidden>Browser storage is unavailable. Your changes are only in memory. <button class="btn" id="emergencyExport">Export answers now</button></div>
 
 <!-- ============ OVERVIEW ============ -->
 <section class="panel" id="p-overview" role="tabpanel">
   <div class="hero">
     <div>
-      <h1>Where this plan stands today</h1>
-      <p class="lede">A baby born after 1 April 2027 lands in Singapore's new <strong>SG Child Support Package</strong> &mdash; announced at the 2026 National Day Rally, replacing Baby Bonus. That is roughly <span class="num">$70,000</span> of support to age 17, and about <span class="num">$25,000</span> of it arrives in the first year. Everything below is costed against that.</p>
+      <h1>This week, together</h1>
+      <p class="lede">Your next steps, the decisions still to make, and the money to plan for.</p>
+      <div id="weekSummary"></div>
     </div>
     <svg class="hero-art" viewBox="0 0 150 150" aria-hidden="true" focusable="false">
       <circle cx="75" cy="75" r="70" fill="var(--accent-wash)"/>
@@ -895,7 +923,7 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
         <p class="tiny" style="margin-top:6px">The parasite comes from cat faeces and only becomes infectious <strong>one to five days after being passed</strong>. An automatic box clears waste within minutes, so it never sits in the litter long enough to matter. Combined with indoor cats on commercial food that do not hunt, your risk is already low, and most human infection comes from undercooked meat and unwashed vegetables rather than cats.</p>
         <p class="tiny" style="margin-top:6px"><strong>What is left to hand over:</strong> emptying the sealed waste drawer, roughly every four to seven days with two cats, and the monthly deep clean. That is where contact actually happens, so he takes both from the moment you start trying. If she ever has to, disposable gloves and wash hands.</p></div>
       <div class="card"><h4>The cot is the real safety issue</h4>
-        <p class="tiny" style="margin-top:6px">A cat looking for a warm spot may settle against a newborn's face, and a newborn cannot turn their head away. This is the one genuine physical risk, and it is easy to design out: keep the nursery door shut when she sleeps, or fit a cot net. Double-sided tape along the cot rail teaches them to stay off. Supervision stays the rule until she is old enough to move away by herself.</p></div>
+        <p class="tiny" style="margin-top:6px">A cat looking for a warm spot may settle against a newborn's face, and a newborn cannot turn their head away. This is the one genuine physical risk, and it is easy to design out: keep pets out of the room where the baby sleeps. Use a clear, firm, flat sleep surface and follow the cot manufacturer’s instructions. Do not add improvised covers or nets. <a href="https://www.cpsc.gov/SafeSleep" target="_blank" rel="noopener">CPSC safe-sleep guidance</a>.</p></div>
       <div class="card"><h4>Change things early, not at the birth</h4>
         <p class="tiny" style="margin-top:6px">Move litter trays and feeding stations out of the nursery weeks ahead, so the cats do not connect being displaced with the baby arriving. Set the nursery up early and let them explore it before it becomes off-limits. Shift their feeding and play times now to whatever they will be afterwards. Play baby crying recordings quietly for a few weeks, and leave baby lotion and wipes where they can investigate.</p></div>
       <div class="card"><h4>Allergies are not a reason to rehome them</h4>
@@ -1456,7 +1484,7 @@ TASKS.push({id:"q60",g:"Health and us",t:"How we handle the cats",
  tg:["Duties","Health","Logistics"],
  d:["<b>Toxoplasmosis, and why your setup already helps.</b> It comes from cat faeces, and the parasite only becomes infectious <b>1 to 5 days after being passed</b>. The Neakasa clears waste within minutes of use, so it never sits in the litter long enough to become infectious &mdash; that is a genuine reduction, not a technicality. Indoor cats on commercial food that do not hunt are low risk to begin with, and most human infection actually comes from undercooked meat and unwashed vegetables rather than from cats.",
    "<b>So the job to hand over is not scooping.</b> It is emptying the sealed waste drawer &mdash; roughly every 4 to 7 days with two cats &mdash; and the monthly deep clean, where the actual contact happens. He takes both for the whole pregnancy. If she ever has to, disposable gloves and wash hands afterwards.",
-   "<b>The cot is the real safety issue.</b> A cat looking for warmth may settle against a newborn face, and a newborn cannot turn their head away. Keep the nursery door shut when she sleeps, or fit a cot net. Double-sided tape along the cot rail teaches them to stay off.",
+   "<b>The cot is the real safety issue.</b> A cat looking for warmth may settle against a newborn face, and a newborn cannot turn their head away. Keep pets out of the room where the baby sleeps. Do not add improvised covers or nets; follow the cot manufacturer’s instructions and authoritative safe-sleep guidance.",
    "<b>Allergies are not a reason to rehome them.</b> The evidence is mixed and broadly reassuring: several large studies link cats in the first year of life to <i>lower</i> rates of asthma and allergy, and others find no effect either way.",
    "<b>Licensing is done.</b> Both microchipped and licensed, and two cats is exactly the HDB limit, so there is nothing outstanding."],
  l:[["Cat licensing rules (AVS)","https://avs.nparks.gov.sg/noticeboard/cat-management-framework/cat-ownership-limits/"],
@@ -1623,7 +1651,7 @@ const DEFAULTS={
 const el=(s,r)=>(r||document).querySelector(s);
 const els=(s,r)=>Array.from((r||document).querySelectorAll(s));
 const money=n=>(n<0?"−$":"$")+Math.abs(Math.round(n)).toLocaleString("en-SG");
-const esc=s=>String(s).replace(/&(?![a-z#]+;)/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const esc=s=>String(s).replace(/&(?![a-z#]+;)/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 
 const KEYS=["settings","tasks","buys","checks"];
 const S={settings:{},tasks:{},buys:{},checks:{}};
@@ -1632,7 +1660,11 @@ const onChange=[];
 const emit=()=>{onChange.forEach(f=>{try{f()}catch(e){console.error(e)}})};
 
 function lsGet(k){try{return JSON.parse(localStorage.getItem("avery:"+k)||"{}")}catch(e){return {}}}
-function lsSet(k,v){try{localStorage.setItem("avery:"+k,JSON.stringify(v))}catch(e){}}
+const storageErrors=new Set();
+function lsSet(k,v){
+  try{localStorage.setItem("avery:"+k,JSON.stringify(v)); storageErrors.delete(k); return true}
+  catch(e){storageErrors.add(k); return false}
+}
 
 function setSync(mode,txt){
   const d=el("#syncDot"), t=el("#syncTxt");
@@ -1722,6 +1754,7 @@ const isDirty=()=>KEYS.some(k=>Object.keys(dirty[k]).length>0);
 
 let flushTimer=null;
 function save(key,patch,quiet){
+  rememberChange(key,patch);
   S[key]=Object.assign({},S[key]);
   Object.keys(patch).forEach(k=>{
     S[key][k]=(patch[k]&&typeof patch[k]==="object"&&!Array.isArray(patch[k]))
@@ -1779,6 +1812,7 @@ async function flush(){
     if(changed) emit();
     return "lan";
   }
+  if(storageErrors.size) throw new Error("Browser storage is unavailable. Export your answers before closing this page.");
   settle(); return "local";
 }
 const cfg=k=>(S.settings[k]!==undefined?S.settings[k]:DEFAULTS[k]);
@@ -1790,20 +1824,24 @@ function dueDate(){ const d=new Date(cfg("due")+"T00:00:00"); return isNaN(d)?ne
 function wkDate(w){ return new Date(dueDate().getTime()+(w-40)*7*DAY); }
 function fmt(d){ return d.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}); }
 function fmtShort(d){ return d.toLocaleDateString("en-GB",{month:"short",year:"numeric"}); }
-function todayWk(){ return 40-Math.round((dueDate()-new Date())/(7*DAY)); }
+function todayWk(){
+  if(cfg("stage")==="trying") return -12;
+  if(cfg("stage")==="born"&&S.settings.birthDate) return 40+Math.floor((new Date()-new Date(S.settings.birthDate+"T00:00:00"))/(7*DAY));
+  return 40-Math.round((dueDate()-new Date())/(7*DAY));
+}
 
 /* ---------------- money model ---------------- */
 function antenatalFor(h){
   if(h.h==="KKH") return 818;   // KKH publishes one antenatal package price, ward aside
-  if(h.t.indexOf("subsidised")>-1) return 818;
   if(h.t.indexOf("unsubsidised")>-1) return 2000;
+  if(h.t.indexOf("subsidised")>-1) return 818;
   if(h.h==="Raffles Hospital"||h.h==="Parkway East") return 2500;
   if(h.h==="Thomson Medical"||h.h==="Mount Alvernia") return 3000;
   return 3500;
 }
 function newbornFor(h){
-  if(h.t.indexOf("subsidised")>-1) return 300;
   if(h.t.indexOf("unsubsidised")>-1) return 800;
+  if(h.t.indexOf("subsidised")>-1) return 300;
   return 1300;
 }
 function buyTier(it){
@@ -1815,9 +1853,10 @@ function buyTier(it){
 }
 function buyPrice(it){
   const b=S.buys[it.id];
+  if(buyTier(it)==="skip") return 0;
   if(b&&typeof b.actual==="number"&&!isNaN(b.actual)) return b.actual;
   const t=buyTier(it);
-  return t==="skip"?0:(it[t==="budget"?"b":t==="premium"?"p":"m"].p||0);
+  return t==="skip"?0:(it[t==="budget"?"b":t==="premium"?"p":"m"].p||0)*Math.max(1,Math.min(20,Number(b&&b.quantity)||1));
 }
 function buyIsEst(it){
   const t=buyTier(it); if(t==="skip") return false;
@@ -1952,11 +1991,11 @@ function boardSettings(){
     const s=taskState(id);
     /* A decision someone wrote down is a decision, whether or not the card has
        been ticked over to Agreed. Parked-with-an-answer still counts. */
-    const decided=(s.status||"todo")==="agreed"||(s.agreed&&s.agreed.trim());
+    const decided=!!s.money||(s.status||"todo")==="agreed"||(s.agreed&&s.agreed.trim());
     if(!decided) return;
-    const txt=remarkOf(s); if(!txt) return;
-    const vals=BOARD[id](txt); if(!vals) return;
-    out.push({id:id,text:(s.agreed||txt).split("\n")[0].trim(),vals:vals,sig:id+"|"+txt});
+    const txt=remarkOf(s)||"Confirmed budget choices";
+    const vals=s.money; if(!vals||!Object.keys(vals).length) return;
+    out.push({id:id,text:(s.agreed||txt).split("\n")[0].trim(),vals:vals,sig:id+"|"+JSON.stringify(vals)});
   });
   return out;
 }
@@ -2554,6 +2593,7 @@ function renderDiscuss(){
     dsTag=(dsTag===b.dataset.f)?"All":b.dataset.f; renderDiscuss();
   }));
   const bits=[];
+  if(dsOwner!=="All") bits.push("owner <strong>"+esc(dsOwner)+"</strong>");
   if(dsStatus!=="all") bits.push("<strong>"+(ST.find(x=>x[0]===dsStatus)||[,dsStatus])[1]+"</strong>");
   if(dsFilter!=="All") bits.push("<strong>"+dsFilter+"</strong>");
   if(dsTag!=="All") bits.push("tagged <strong>"+dsTag+"</strong>");
@@ -2561,13 +2601,14 @@ function renderDiscuss(){
     ? "<p class=note>Showing "+bits.join(", ")+". The counts above cover all "+TASKS.length+" conversations. <button class=linkbtn data-clearf type=button>Show everything</button></p>"
     : "";
   const cf=el("[data-clearf]",el("#dsScope"));
-  if(cf) cf.addEventListener("click",()=>{dsStatus="all"; dsFilter="All"; dsTag="All"; renderDiscuss()});
+  if(cf) cf.addEventListener("click",()=>{dsStatus="all"; dsFilter="All"; dsTag="All"; dsOwner="All"; el("#ownerFilter").value="All"; renderDiscuss()});
 
   const ORDER={todo:0,discussing:1,parked:2,agreed:3};
   const BAND={todo:"Still to discuss",discussing:"Being discussed now",parked:"Parked for now",agreed:"Settled"};
   const list=TASKS
     .map((t,i)=>({t:t,i:i,st:taskState(t.id).status||"todo"}))
     .filter(r=>dsStatus==="all"||r.st===dsStatus)
+    .filter(r=>dsOwner==="All"||(dsOwner==="Unassigned"?!taskState(r.t.id).owner:taskState(r.t.id).owner===dsOwner))
     .filter(r=>dsFilter==="All"||r.t.g===dsFilter)
     .filter(r=>dsTag==="All"||(taskState(r.t.id).tags||r.t.tg).indexOf(dsTag)>-1)
     .sort((a,b)=>(ORDER[a.st]-ORDER[b.st])||(a.i-b.i));
@@ -2692,11 +2733,10 @@ function renderDiscuss(){
       save("tasks",{[id]:{_why:on?1:0}},true);
     });
     els("textarea[data-k]",node).forEach(ta=>{
-      let tid;
-      ta.addEventListener("input",()=>{clearTimeout(tid); tid=setTimeout(()=>{
+      ta.addEventListener("input",()=>{
         save("tasks",{[id]:{[ta.dataset.k]:ta.value,_open:1}},true);
-      },700)});
-      ta.addEventListener("blur",()=>{clearTimeout(tid);
+      });
+      ta.addEventListener("blur",()=>{
         save("tasks",{[id]:{[ta.dataset.k]:ta.value,_open:1}});
       });
     });
@@ -2704,7 +2744,7 @@ function renderDiscuss(){
 }
 
 /* ---------------- buy ---------------- */
-let byFilter="All";
+let byFilter="All", buyView="all";
 function renderBuy(){
   const chosen=ITEMS.filter(i=>buyTier(i)!=="skip");
   const bought=chosen.filter(i=>(S.buys[i.id]||{}).bought).length;
@@ -2722,7 +2762,7 @@ function renderBuy(){
         total:inCat(c).filter(i=>buyTier(i)!=="skip").length}))),
     "filter",byFilter,id=>{byFilter=id; renderBuy()});
 
-  const list=ITEMS.filter(i=>byFilter==="All"||i.cat===byFilter);
+  const list=ITEMS.filter(i=>(byFilter==="All"||i.cat===byFilter)&&(buyView!=="remaining"||buyTier(i)!=="skip"&&!(S.buys[i.id]||{}).bought));
   el("#byScope").innerHTML=byFilter==="All"?""
     :"<p class=note>Showing <strong>"+list.length+" of "+ITEMS.length+"</strong> items. The totals above still cover everything, not just this filter &mdash; subtotal here is <span class=num>"+money(list.reduce((s,i)=>s+buyPrice(i),0))+"</span>.</p>";
   el("#byBody").innerHTML=list.map(it=>{
@@ -2775,7 +2815,7 @@ function renderOverview(){
   const o=openNow();
   el("#ovTiles").innerHTML=
    tile("Net cash, year one",money(m.netCash),"After the Baby Gift, MediSave and usable CDA","hero")+
-   tile("Support to age 17","$70,000","SG Child Support Package plus MediSave and MediShield","")+
+   tile("Support to age 17","$70,000","SG Child Support Package plus MediSave and Edusave","")+
    tile("Conversations agreed",dsAgreed+" / "+TASKS.length,"In Talk it through","")+
    tile("Tasks due now",String(o.now+o.earlier),o.earlier?o.now+" in "+o.cur.t+", "+o.earlier+" left from earlier":"Open in "+o.cur.t,"");
 
@@ -2842,15 +2882,20 @@ function renderTabs(){
 
 /* go("reference/hospital") opens the tab and scrolls to that section;
    go("timeline/paperwork") opens the paperwork view of the task list. */
-function go(target){
+function go(target,fromHistory){
   target=TAB_ALIAS[target]||target;
   const parts=String(target).split("/"), id=parts[0], sec=parts[1];
   if(!TABS.some(t=>t.id===id)) return go("overview");
   if(id==="timeline"&&sec){ tlView=sec==="paperwork"?"paperwork":sec==="all"?"all":"now"; renderTimeline(); }
+  const previousTarget=location.hash.slice(1)||"overview";
+  if(!fromHistory&&previousTarget!==target){
+    history.replaceState({scrollY:window.scrollY},"",location.href);
+    history.pushState({scrollY:0},"","#"+target);
+  }
   active=id;
   TABS.forEach(t=>{const p=el("#p-"+t.id); if(p){ p.classList.toggle("on",t.id===id); p.setAttribute("aria-labelledby","tab-"+t.id); }});
   renderTabs();
-  try{history.replaceState(null,"","#"+(sec?id+"/"+sec:id))}catch(e){}
+  if(!location.hash) history.replaceState({scrollY:0},"","#"+(sec?id+"/"+sec:id));
   const anchor=sec&&id!=="timeline"?el("#p-"+id+" [data-sec='"+sec+"']"):null;
   if(anchor){
     const nav=el("nav.tabs"), off=(nav?nav.getBoundingClientRect().height:0)+12;
@@ -2875,7 +2920,7 @@ function mountSaveBars(){
     const p=el("#p-"+t.id); if(!p||el(".savebar",p)) return;
     const bar=document.createElement("div");
     bar.className="savebar";
-    bar.innerHTML="<span class=hint>"+HINTS[t.id]+"</span><span class=msg data-msg></span>"+
+    bar.innerHTML="<span class=hint>"+HINTS[t.id]+"</span><span class=msg role=status aria-live=polite data-msg></span>"+
       "<button class='btn primary' data-save type=button>Save now</button>";
     p.appendChild(bar);
     el("[data-save]",bar).addEventListener("click",()=>doSave(bar));
@@ -2887,9 +2932,12 @@ function mountSaveBars(){
    genuinely waiting to be written. */
 function paintSaveBars(){
   const pending=isDirty();
+  const failed=storageErrors.size>0;
+  const warning=el("#storageWarning"); if(warning) warning.hidden=!failed;
   els(".savebar").forEach(bar=>{
     const btn=el("[data-save]",bar), msg=el("[data-msg]",bar);
     btn.hidden=!pending;
+    if(failed){msg.className="msg bad"; msg.textContent="Not saved — export your answers before closing."; btn.hidden=false; return;}
     if(msg.dataset.sticky) return;
     msg.className="msg";
     msg.textContent=pending
@@ -2933,13 +2981,13 @@ function storageCol(){
   let where, detail;
   if(BACKEND==="lan"&&LANNET&&LANNET.stateFile){
     where=LANNET.stateFile;
-    detail="One plain text file on your computer. Both of you write to it, and it is the only copy that matters. It sits in OneDrive, so it is backed up and you can recover an older version by right-clicking it.";
+    detail="One plain text file on your computer. Both of you write to it, and it is the only copy that matters. Use Export to keep a separate copy. Cloud backup depends on where this folder is stored.";
   } else if(BACKEND==="db"){
     where="Stored with this published page";
     detail="This version keeps your answers on Claude's servers rather than in a file, so it works from anywhere and not just your home Wi-Fi. Use Back up a copy for a file you hold yourself.";
   } else {
     where="This browser only";
-    detail="Nothing is being written to a file. Your answers live in this browser's storage and are lost if you clear site data. Open the Avery Plan shortcut on your desktop to save to a real file instead.";
+    detail="Your answers save on this device. They are not synced to GitHub or other devices. Export a copy to transfer later changes. Clearing site data removes this device’s changes.";
   }
   return "<div class=col><h4>Where your answers are saved</h4>"+
     "<div class=shareurl>"+esc(where)+"</div>"+
@@ -2981,21 +3029,20 @@ async function backupNow(btn){
 async function restoreFrom(file,btn){
   const label=btn.textContent;
   try{
-    const data=JSON.parse(await file.text());
-    const picked=KEYS.filter(k=>data[k]&&typeof data[k]==="object");
-    if(!picked.length) throw new Error("that file has no plan data in it");
-    const when=data.savedAt?new Date(data.savedAt).toLocaleString("en-GB"):"an unknown date";
-    const warn="Restore the backup from "+when+"?\n\nThis merges it over what is on the board now, for both of you. "+
-      "Anything you changed since that backup and did not change again will be overwritten.";
-    if(!confirm(warn)){ btn.textContent=label; return; }
-    picked.forEach(k=>save(k,data[k]));
-    await flush();
+    if(file.size>2000000) throw new Error("File is too large (maximum 2 MB).");
+    const data=validatePlan(JSON.parse(await file.text()));
+    const summary=KEYS.map(k=>Object.keys(data[k]||{}).length+" "+k).join(" · ");
+    const when=data.savedAt?new Date(data.savedAt).toLocaleString("en-GB"):"Unknown date";
+    const choice=await chooseDialog("Review import","<p>"+esc(summary)+"</p><p class=note>File date: "+esc(when)+". Merge replaces matching fields and keeps other answers. Replace uses only this file. Undo is available for this session.</p>",BACKEND==="local"?[["merge","Merge answers"],["replace","Replace this device’s plan"]]:[["merge","Merge answers"]]);
+    if(!choice) return;
+    recordSnapshot("Import answers"); historyApplying=true;
+    try{KEYS.forEach(k=>{
+      if(choice==="replace"){S[k]=data[k]||{}; dirty[k]=Object.assign({},S[k]); lsSet(k,S[k]);}
+      else if(data[k]) save(k,data[k],true);
+    }); emit(); await flush();}finally{historyApplying=false}
     btn.textContent="Restored";
-  }catch(e){
-    btn.textContent="Could not read that file";
-    console.warn(e);
-  }
-  setTimeout(()=>{btn.textContent=label},2800);
+  }catch(e){btn.textContent="Import failed: "+e.message; return;}
+  setTimeout(()=>{btn.textContent=label},4000);
 }
 
 function renderShare(){
@@ -3006,6 +3053,8 @@ function renderShare(){
       "<p class=tiny style='max-width:48ch'>Use the share menu on this artifact to send it to your partner. Anything either of you ticks syncs to the other.</p>"+
       "<p class=tiny style='max-width:48ch'>To share over your home Wi-Fi instead, open the plan folder on your computer and run <span class=num>python server.py</span>, then use the address it prints.</p>"+
       "<div><button class=btn data-close type=button>Close</button></div></div>";
+  } else if(location.protocol==="https:"&&BACKEND==="local"){
+    html+="<div class=col><h4>Share this website</h4><p class=tiny>New browsers start with the published snapshot. Later edits stay on each device until you export and import them.</p><div class=shareurl>"+esc(location.origin+location.pathname)+"</div><button class=btn data-public-copy>Copy website link</button><p class=tiny>Snapshot recovered 10 September 2026. No live sync.</p><button class=btn data-close>Close</button></div>";
   } else if(url){
     html+="<div class=col><h4>Open this on the other phone</h4>"+
       "<p class=tiny style='max-width:44ch'>It needs to be on the same Wi-Fi. Everything you both change is saved to one shared file on your computer.</p>"+
@@ -3021,6 +3070,8 @@ function renderShare(){
   }
   html+=storageCol();
   card.innerHTML=html+"</div>";
+  const publicCopy=el("[data-public-copy]",card);
+  if(publicCopy) publicCopy.onclick=()=>navigator.clipboard.writeText(location.origin+location.pathname).then(()=>publicCopy.textContent="Link copied").catch(()=>publicCopy.textContent="Select and copy the link above");
   const close=()=>{card.hidden=true};
   els("[data-close]",card).forEach(b=>b.addEventListener("click",close));
   const cp=el("[data-copy]",card);
@@ -3107,15 +3158,180 @@ function setupScrollHints(){
   });
 }
 
+/* Practical planning tools. Snapshots stay on this device; no remote writes. */
+let appReady=false, historyApplying=false, undoStack=[], lastHistoryAt=0, dsOwner="All";
+const clonePlan=()=>JSON.parse(JSON.stringify(Object.fromEntries(KEYS.map(k=>[k,S[k]]))));
+function recordSnapshot(label){
+  undoStack.push({at:new Date().toLocaleTimeString("en-GB"),label,data:clonePlan()});
+  if(undoStack.length>30) undoStack.shift();
+}
+function rememberChange(key,patch){
+  if(!appReady||historyApplying||reconciling) return;
+  const meaningful=Object.values(patch).some(v=>!v||typeof v!=="object"||Object.keys(v).some(k=>!k.startsWith("_")));
+  if(!meaningful||Date.now()-lastHistoryAt<900) return;
+  const field=Object.keys(patch)[0], named=key==="tasks"?TASKS.find(t=>t.id===field)?.t:key==="buys"?ITEMS.find(i=>i.id===field)?.n:KEYLBL[field];
+  recordSnapshot("Updated "+(named||key)); lastHistoryAt=Date.now();
+}
+function undoChange(){
+  const previous=undoStack.pop(); if(!previous) return;
+  historyApplying=true;
+  try{KEYS.forEach(k=>{
+    const before=S[k]; S[k]=previous.data[k];
+    dirty[k]=Object.assign(Object.fromEntries(Object.keys(before).map(f=>[f,null])),S[k]);
+    lsSet(k,S[k]);
+  }); emit(); flush().then(paintSaveBars).catch(paintSaveBars);}finally{historyApplying=false}
+}
+function captureFocus(){
+  const node=document.activeElement; if(!node||node===document.body) return ()=>{};
+  const id=node.id, card=node.closest("[data-id]"), cardId=card&&card.dataset.id;
+  const attrs=["data-tier","data-skip","data-bought","data-toggle","data-learn","data-why","data-st","data-f","data-view","data-addbtn","data-expand","data-fold","data-pick","data-tag","data-assume"];
+  const attr=attrs.find(a=>node.hasAttribute(a)), value=attr&&node.getAttribute(attr);
+  return ()=>{if(document.activeElement!==document.body) return;
+    let target=id?document.getElementById(id):null;
+    if(!target&&attr) target=els("["+attr+"]").find(e=>e.getAttribute(attr)===value&&(!cardId||e.closest("[data-id]")?.dataset.id===cardId));
+    if(target) target.focus({preventScroll:true});
+  };
+}
+function decorateAccessibility(){
+  els("[data-toggle],[data-learn],[data-why]").forEach(b=>{
+    const card=b.closest(".task"), cls=b.hasAttribute("data-toggle")?"open":b.hasAttribute("data-learn")?"learn":"why";
+    b.setAttribute("aria-expanded",String(card.classList.contains(cls)));
+  });
+  els("[data-expand]").forEach(b=>b.setAttribute("aria-expanded","false"));
+  els("[data-fold]").forEach(b=>b.setAttribute("aria-expanded","true"));
+}
+function chooseDialog(title,body,choices){
+  return new Promise(resolve=>{
+    const dialog=document.createElement("dialog"); dialog.className="plan-dialog";
+    const heading=document.createElement("h2"); heading.textContent=title;
+    const content=document.createElement("div"); content.innerHTML=body;
+    const actions=document.createElement("div"); actions.className="dialog-actions";
+    dialog.append(heading,content,actions); document.body.append(dialog);
+    let finished=false;const done=v=>{if(finished)return;finished=true;dialog.close();dialog.remove();resolve(v)};
+    [...choices,[null,"Cancel"]].forEach(([value,label])=>{const b=document.createElement("button");b.className="btn";b.textContent=label;b.onclick=()=>done(value);actions.append(b)});
+    dialog.addEventListener("cancel",e=>{e.preventDefault();done(null)});dialog.showModal();
+  });
+}
+const budgetOptions={
+  hosp:()=>HOSP.map((h,i)=>[i,h.h+" · "+h.ward]),
+  del:()=>[["v","Vaginal"],["c","Caesarean"]],
+  help:()=>[["nanny","Confinement nanny"],["centre","Confinement centre"],["helper","Live-in helper"],["family","Family"],["none","Just us"]],
+  care:()=>[["none","No additional care"],["infant","Infant care"],["helper","Additional helper"]],
+  feedMode:()=>[["breast","Breastfeeding"],["mix","Mixed feeding"],["formula","Formula"]],
+  cdaDeposit:()=>[[0,"$0"],[1000,"$1,000"],[2500,"$2,500"],[5000,"$5,000"]]
+};
+const budgetFields={q02:["hosp"],q20:["help","care"],q31:["feedMode"],q04:["cdaDeposit"]};
+function budgetForm(keys){return keys.map(k=>"<label class=budget-field>"+esc(KEYLBL[k]||k)+"<select data-budget='"+k+"'>"+budgetOptions[k]().map(([v,label])=>"<option value='"+v+"'"+(String(cfg(k))===String(v)?" selected":"")+">"+esc(label)+"</option>").join("")+"</select></label>").join("");}
+function scenarioModel(patch){const previous=S.settings; try{S.settings=Object.assign({},previous,patch);return model()}finally{S.settings=previous}}
+async function editBudget(id){
+  const keys=id?budgetFields[id]:Object.keys(budgetOptions), baseline=model().netCash;
+  const promise=chooseDialog(id?"Confirm budget choices":"Compare a budget scenario",budgetForm(keys)+"<p id=budgetDelta class=callout></p><p class=note>"+(id?"Only these explicit choices change the budget. Notes are never interpreted as instructions.":"Explore an alternative without changing your saved plan.")+"</p>",id?[["apply","Apply these choices"]]:[]);
+  const dialog=el("dialog:last-of-type"), values=()=>Object.fromEntries(els("[data-budget]",dialog).map(s=>[s.dataset.budget,["hosp","cdaDeposit"].includes(s.dataset.budget)?Number(s.value):s.value]));
+  const update=()=>{const total=scenarioModel(values()).netCash;el("#budgetDelta",dialog).textContent="Year-one cash: "+money(total)+" · "+money(total-baseline)+" compared with your current plan"};
+  els("select",dialog).forEach(s=>s.onchange=update);update();
+  const read={};dialog.addEventListener("click",()=>Object.assign(read,values()),true);
+  if(await promise==="apply") save("tasks",{[id]:{money:read}});
+}
+function validatePlan(data){
+  if(!data||typeof data!=="object"||Array.isArray(data)) throw new Error("Expected a plan object.");
+  const walk=(value,depth=0)=>{if(depth>8)throw new Error("Nested data is too deep.");if(typeof value==="number"&&!Number.isFinite(value))throw new Error("Invalid number.");if(value&&typeof value==="object")Object.entries(value).forEach(([k,v])=>{if(["__proto__","prototype","constructor"].includes(k))throw new Error("Unsafe field.");walk(v,depth+1)})};walk(data);
+  if(!KEYS.some(k=>data[k]))throw new Error("No plan data found.");
+  KEYS.forEach(k=>{if(data[k]!==undefined&&(!data[k]||typeof data[k]!=="object"||Array.isArray(data[k])))throw new Error(k+" must be an object.")});
+  const settings=data.settings||{};
+  if(settings.stage!==undefined&&!["auto","trying","pregnant","born"].includes(settings.stage))throw new Error("Invalid planning stage.");
+  const limits={hosp:[0,HOSP.length-1],careStart:[2,12],careFee:[0,6000],careAdd:[0,710],cdaDeposit:[0,5000]};
+  Object.entries(limits).forEach(([k,[lo,hi]])=>{if(settings[k]!==undefined&&(typeof settings[k]!=="number"||settings[k]<lo||settings[k]>hi))throw new Error("Invalid "+k)});
+  Object.entries(budgetOptions).forEach(([k,options])=>{if(settings[k]!==undefined&&k!=="cdaDeposit"&&!options().some(([v])=>v===settings[k]))throw new Error("Invalid "+k)});
+  ["due","birthDate"].forEach(k=>{if(settings[k]!==undefined&&(!/^\d{4}-\d{2}-\d{2}$/.test(settings[k])||isNaN(new Date(settings[k]))))throw new Error("Invalid "+k)});
+  Object.values(data.tasks||{}).forEach(t=>{if(t===null)return;if(!t||typeof t!=="object"||Array.isArray(t))throw new Error("Invalid conversation.");["agreed","notes"].forEach(k=>{if(t[k]!==undefined&&typeof t[k]!=="string")throw new Error("Invalid conversation text.")});if(t.status&&!ST.some(([v])=>v===t.status))throw new Error("Invalid conversation status.");if(t.tags&&(!Array.isArray(t.tags)||!t.tags.every(v=>TAGS.includes(v))))throw new Error("Invalid tags.");if(t.picks&&(!Array.isArray(t.picks)||!t.picks.every(v=>typeof v==="string")))throw new Error("Invalid choices.");if(t.money){Object.entries(t.money).forEach(([k,v])=>{if(!budgetOptions[k]||!budgetOptions[k]().some(([x])=>x===v))throw new Error("Invalid budget choice.")})}});
+  Object.values(data.checks||{}).forEach(v=>{if(v===null||typeof v==="boolean"||v===0||v===1)return;if(!v||typeof v!=="object"||Array.isArray(v)||typeof v.text!=="string"||!PHASES.some(p=>p.id===v.phase))throw new Error("Invalid checklist record.")});
+  Object.values(data.buys||{}).forEach(v=>{if(v===null)return;if(!v||typeof v!=="object"||Array.isArray(v))throw new Error("Invalid shopping record.");if(v.quantity!==undefined&&(!Number.isInteger(v.quantity)||v.quantity<1||v.quantity>20))throw new Error("Invalid quantity.");if(v.tier&&!['skip','budget','mid','premium'].includes(v.tier))throw new Error("Invalid price tier.");if(v.actual!=null&&(typeof v.actual!=="number"||v.actual<0))throw new Error("Invalid paid amount.")});
+  return data;
+}
+function renderWeek(){
+  const phase=currentPhase(), earlier=leftFromEarlier(), items=phase.i.filter(x=>!checked(x[0]));
+  const host=el("#weekSummary");host.innerHTML="<p class=note>"+(earlier.length?earlier.length+" unfinished from earlier stages. ":"")+esc(phase.t)+" · "+TASKS.filter(t=>!["agreed","parked"].includes(taskState(t.id).status)).length+" conversations still open.</p>";
+  items.slice(0,3).forEach(x=>{const b=document.createElement("button");b.className="week-action";b.textContent=x[1];b.onclick=()=>{go("timeline/now");const target=els("[data-chk]").find(e=>e.dataset.chk===x[0]);target?.scrollIntoView({block:"center"})};host.append(b)});
+  if(!items.length)host.insertAdjacentHTML("beforeend","<p>Your current-stage checklist is complete.</p>");
+}
+function searchPlan(query){
+  const host=el("#searchResults"), q=query.trim().toLowerCase();host.replaceChildren();host.hidden=!q;if(!q)return;
+  const results=[];const add=(label,detail,action)=>{if((label+" "+detail).toLowerCase().includes(q))results.push({label,action})};
+  TASKS.forEach(t=>add(t.t,[taskState(t.id).agreed,taskState(t.id).notes,t.w].join(" "),()=>{dsStatus="all";dsFilter="All";dsTag="All";dsOwner="All";renderDiscuss();go("discuss");el(".task[data-id='"+t.id+"']")?.scrollIntoView({block:"center"})}));
+  PHASES.forEach(ph=>ph.i.forEach(x=>add(x[1],x[2]||"",()=>{go("timeline/all");els("[data-chk]").find(e=>e.dataset.chk===x[0])?.scrollIntoView({block:"center"})})));
+  ITEMS.forEach(i=>add(i.n,i.why,()=>{byFilter="All";buyView="all";renderBuy();go("buy");el(".buy[data-id='"+i.id+"']")?.scrollIntoView({block:"center"})}));
+  els(".refsec").forEach(sec=>add(sec.querySelector("h2").textContent,sec.textContent,()=>go("reference/"+sec.dataset.sec)));
+  const summary=document.createElement("p");summary.className="note";summary.textContent=results.length?results.length+" results (showing up to 20)":"No matches. Try a task, item, or topic.";host.append(summary);
+  results.slice(0,20).forEach(r=>{const b=document.createElement("button");b.className="week-action";b.textContent=r.label;b.onclick=()=>{r.action();host.hidden=true;el("#planSearch").value=""};host.append(b)});
+}
+function renderEnhancements(){
+  if(!el("#planSearch"))return;
+  renderWeek(); el("#undoPlan").disabled=!undoStack.length; el("#undoPlan").hidden=!undoStack.length;
+  const stage=el("#planStage"); if(document.activeElement!==stage)stage.value=cfg("stage")||"auto";
+  el("#birthWrap").hidden=stage.value!=="born";
+  if(document.activeElement!==el("#birthDate"))el("#birthDate").value=S.settings.birthDate||"";
+  Object.keys(budgetFields).forEach(id=>{const card=el(".task[data-id='"+id+"']");if(!card||card.querySelector("[data-budget-edit]"))return;const b=document.createElement("button");b.className="btn";b.dataset.budgetEdit=id;b.textContent="Review budget choices";b.onclick=()=>editBudget(id);card.querySelector(".t-actions").append(b)});
+  renderShopExtras();
+  const totals=el("#shopTotals");if(totals){
+    const estimates=ITEMS.reduce((sum,i)=>{const tier=buyTier(i);return sum+(tier==="skip"?0:(i[tier==="budget"?"b":tier==="premium"?"p":"m"].p||0)*(S.buys[i.id]?.quantity||1))},0);
+    const actual=ITEMS.reduce((sum,i)=>sum+(typeof S.buys[i.id]?.actual==="number"?S.buys[i.id].actual:0),0);
+    totals.textContent="Selected tier estimates: "+money(estimates)+" · Paid amounts recorded: "+money(actual);
+  }
+}
+function renderShopExtras(){
+  els(".buy").forEach(card=>{if(card.querySelector(".buy-extra"))return;const id=card.dataset.id, st=S.buys[id]||{}, box=document.createElement("div");box.className="buy-extra";
+    const qty=document.createElement("input");qty.type="number";qty.min=1;qty.max=20;qty.value=st.quantity||1;qty.setAttribute("aria-label","Quantity of "+ITEMS.find(i=>i.id===id).n);qty.onchange=()=>save("buys",{[id]:{quantity:Math.max(1,Math.min(20,Math.round(Number(qty.value)||1)))}});
+    const date=document.createElement("input");date.type="date";date.value=st.targetDate||"";date.setAttribute("aria-label","Target purchase date");date.onchange=()=>save("buys",{[id]:{targetDate:date.value}});
+    const qlabel=document.createElement("label");qlabel.textContent="Quantity ";qlabel.append(qty);const dlabel=document.createElement("label");dlabel.textContent="Buy by ";dlabel.append(date);box.append(qlabel,dlabel);
+    const tier=buyTier(ITEMS.find(i=>i.id===id));
+    if(tier!=="skip"){
+      const toggle=document.createElement("button");toggle.className="btn";toggle.textContent="Compare tiers";toggle.setAttribute("aria-expanded","false");card.classList.add("chosen-tier");toggle.onclick=()=>{const on=card.classList.toggle("show-tiers");toggle.textContent=on?"Hide other tiers":"Compare tiers";toggle.setAttribute("aria-expanded",String(on))};box.append(toggle);
+    }
+    const item=ITEMS.find(i=>i.id===id), band=item[tier==="budget"?"b":tier==="premium"?"p":"m"];
+    const a=document.createElement("a");a.textContent="Find this item";a.target="_blank";a.rel="noopener";a.href="https://www.google.com/search?q="+encodeURIComponent(band.pick+" Singapore");box.append(a);card.append(box);
+  });
+}
+function cashflowPreview(){
+  const m=model(), flows=Array.from({length:14},()=>0);
+  flows[0]=m.antenatal+m.screens+m.gear+m.helpCost+m.foodCost+m.cdaDep;
+  flows[1]=m.delivery+m.newborn+m.lactCost-m.medisave;
+  flows[2]=m.insurance;
+  for(let month=1;month<=12;month++){if(month>=4)flows[month+1]+=m.monthly;if(month>Number(cfg("careStart"))&&m.months)flows[month+1]+=(m.careCost-m.cdaApplied)/m.months;}
+  const body="<p class=note>Illustrative timing, not a payout forecast: deposits and purchases before birth, delivery net of MediSave at birth, ongoing costs during the year. Adjust the two assumed Baby Gift months below. CDA offsets are spread over childcare months. Quotes, reimbursement delays, and eligibility can change cash needed.</p><label>First half of Baby Gift: month <input id=giftMonth1 type=number min=1 max=12 value=1></label><label>Second half: month <input id=giftMonth2 type=number min=1 max=12 value=12></label><div id=flowRows></div><p id=flowPeak class=callout></p>";
+  chooseDialog("Cash needed over time",body,[]);const dialog=el("dialog:last-of-type");
+  const render=()=>{const out=flows.slice();["giftMonth1","giftMonth2"].forEach(id=>{const input=el("#"+id,dialog),n=Math.max(1,Math.min(12,Math.round(Number(input.value)||1)));input.value=n;out[n+1]-=m.babyGift/2});let sum=0,peak=0;el("#flowRows",dialog).innerHTML=out.map((v,i)=>{sum+=v;peak=Math.max(peak,sum);return "<div class=flow-row><span>"+(i===0?"Before birth":i===1?"At birth":"Month "+(i-1))+"</span><span>"+money(v)+"</span><span>"+money(sum)+" cumulative</span></div>"}).join("");el("#flowPeak",dialog).textContent="Peak cumulative cash needed: "+money(peak)+" · Year-one net: "+money(sum)};
+  els("input",dialog).forEach(i=>i.onchange=render);render();
+}
+function setupEnhancements(){
+  el("#planTools").innerHTML="<div class=tool-row><label class=search-label for=planSearch>Search the plan<input id=planSearch type=search placeholder='Tasks, decisions, shopping, references…'></label><button class=btn id=undoPlan>Undo last change</button></div><div id=searchResults class=card hidden aria-live=polite></div><details id=planSettings><summary>Plan settings &amp; history</summary><button class=btn id=planHistory>Session history</button><div class=tool-row><label>Planning stage <select id=planStage><option value=auto>Use due date (current plan)</option><option value=trying>Trying / planning</option><option value=pregnant>Pregnant</option><option value=born>Baby born</option></select></label><label id=birthWrap hidden>Birth date <input id=birthDate type=date></label></div></details>";
+  el("#planSearch").oninput=e=>searchPlan(e.target.value);
+  el("#undoPlan").onclick=undoChange;
+  el("#planHistory").onclick=()=>chooseDialog("Changes this session",undoStack.length?"<ol>"+undoStack.map(h=>"<li>"+esc(h.at+" · "+h.label)+"</li>").join("")+"</ol><p class=note>History lasts until this page closes. Undo restores the previous plan.</p>":"<p>No changes in this session.</p>",[]);
+  el("#planStage").onchange=e=>{setCfg("stage",e.target.value);if(e.target.value==="born"&&!S.settings.birthDate){el("#birthWrap").hidden=false;el("#birthDate").focus();}};
+  el("#birthDate").max=new Date().toLocaleDateString("en-CA");
+  el("#birthDate").onchange=e=>{if(e.target.value&&e.target.checkValidity())save("settings",{stage:"born",birthDate:e.target.value});else e.target.reportValidity()};
+  el("#emergencyExport").onclick=e=>backupNow(e.currentTarget);
+  const moneyTools=document.createElement("div");moneyTools.className="tool-row";moneyTools.innerHTML="<button class=btn id=scenarios>Compare a scenario</button><button class=btn id=cashflow>View monthly cash needs</button><a href='https://www.madeforfamilies.gov.sg/ndr-2026-supporting-families' target=_blank rel=noopener>Support policy · checked 10 Sep 2026</a>";el("#moneyTiles").before(moneyTools);el("#scenarios").onclick=()=>editBudget(null);el("#cashflow").onclick=cashflowPreview;
+  const owner=document.createElement("label");owner.className="tool-row";owner.innerHTML="Conversation owner <select id=ownerFilter><option>All</option><option>Her</option><option>Him</option><option>Both</option><option>Unassigned</option></select>";el("#dsFilters").before(owner);el("#ownerFilter").onchange=e=>{dsOwner=e.target.value;renderDiscuss();renderEnhancements()};
+  const shop=document.createElement("div");shop.className="tool-row";shop.innerHTML="<label>Shopping view <select id=shoppingView><option value=all>All items</option><option value=remaining>Still to buy</option></select></label><span class=note>Paid amount is the total for the item, across all quantities.</span><span id=shopTotals class=note></span>";el("#byTiles").before(shop);el("#shoppingView").onchange=e=>{buyView=e.target.value;renderBuy();renderEnhancements()};
+  window.addEventListener("popstate",e=>{go(location.hash.slice(1)||"overview",true);window.scrollTo(0,e.state?.scrollY||0)});
+  document.addEventListener("click",()=>queueMicrotask(()=>{decorateAccessibility();renderEnhancements()}));
+  renderEnhancements();
+}
+
 /* ---------------- boot ---------------- */
 function renderAll(){
   /* Panels are rebuilt with innerHTML, which throws away the focused node.
      Remember it by id so keyboard users are not sent back to the top. */
+  const restoreFocus=captureFocus();
   const wasFocused=document.activeElement&&document.activeElement.id;
   const d=dueDate(), w=todayWk();
   el("#due").value=cfg("due");
-  el("#dueMeta").textContent=w<2?"pre-conception":(w>40?fmtShort(d)+" · born":"week "+w+" of 40");
+  el("#due").hidden=cfg("stage")==="born";
+  el("label[for=due]").hidden=cfg("stage")==="born";
+  el("#dueMeta").textContent=cfg("stage")==="born"?(S.settings.birthDate?"Born "+fmt(new Date(S.settings.birthDate+"T00:00:00"))+" · "+Math.max(0,w-40)+" weeks old":"Enter the birth date below"):cfg("stage")==="trying"?"Planning · due date is a placeholder":!S.settings.due?"Confirm your due date when known":w<2?"pre-conception":(w>40?"Past expected due date":"week "+w+" of 40");
   renderTabs(); renderOverview(); renderMoney(); renderTimeline(); renderDiscuss(); renderBuy();
+  renderEnhancements(); decorateAccessibility(); restoreFocus();
   if(wasFocused&&document.activeElement===document.body){
     const back=document.getElementById(wasFocused);
     if(back) back.focus({preventScroll:true});
@@ -3124,12 +3340,13 @@ function renderAll(){
 onChange.push(migrateMerged);
 onChange.push(reconcileBoard);
 onChange.push(renderAll);
-el("#due").addEventListener("change",e=>setCfg("due",e.target.value));
+el("#due").addEventListener("change",e=>{if(e.target.value) setCfg("due",e.target.value);else e.target.value=cfg("due")});
 renderStatic();
 setupScrollHints();
 el("nav.tabs").addEventListener("scroll",updateTabOverflow,{passive:true});
 window.addEventListener("resize",revealActiveTab);
 mountSaveBars();
+setupEnhancements();
 window.addEventListener("beforeunload",()=>{ if(isDirty()) flush().catch(()=>{}) });
 /* The reference rail is a table of contents, not a progress meter. */
 const rfRail=el("#rfRail"); rfRail.dataset.mode="jump";
@@ -3137,7 +3354,7 @@ renderRail(rfRail,"On this page",REFSECS.map(r=>({id:r[0],label:r[1]})),"jump",n
 const hash=(location.hash||"").replace("#","");
 go(hash||"overview");
 renderAll();
-initStore();
+initStore().then(()=>{appReady=true; renderEnhancements(); paintSaveBars()});
 </script>
 
 </body>

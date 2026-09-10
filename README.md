@@ -4,9 +4,9 @@ A private planning tracker for a first baby in Singapore — costs, government
 support, a task list by stage, and a board for the decisions the two of you
 need to make together.
 
-Everything you both tick, pick or write is shared. Nothing is sent anywhere
-except between your own devices and, if you use the published link, your
-Claude account.
+The published website includes the recovered starting answers. Later changes
+are saved in your browser, or shared through the local server when you use it.
+GitHub Pages does not automatically sync new answers between devices.
 
 ---
 
@@ -78,10 +78,9 @@ Five tabs where you change things, then one tab of reading.
 
 Two things worth knowing about how it behaves:
 
-- **Decisions on the board drive the Money tab.** Mark a card agreed, or just
-  write a decision on it, and the matching assumption updates. Change that
-  setting by hand afterwards and the Money tab tells you it no longer matches
-  the board, with a button to put it back.
+- **Review budget choices on the board to update Money.** Hospital, care,
+  feeding and CDA conversations have explicit controls and show the cost change
+  before applying. Free-text notes do not silently change the budget.
 - **Anything marked `assumed`** is a starting guess neither of you has chosen.
   Change it, or click the badge to keep the guess as your choice, and the
   badge clears.
@@ -188,3 +187,33 @@ Several 2026 measures were announced but not fully detailed — the merged
 Childcare Leave scheme, the preschool fee reductions, the extended subsidies.
 Those are flagged in the app. Confirm anything you are about to act on against
 the official page, which the Sources tab links to and marks as official.
+
+
+## Planning tools
+
+- Search finds conversations (including saved notes), tasks, shopping items,
+  and reference sections. Overview shows the next three current-stage actions.
+- Choose Trying / planning, Pregnant, or Baby born. A born baby uses the entered
+  birth date for the timeline; the existing due-date mode remains available.
+- Compare a scenario without saving, or preview monthly cash needs. The cash-flow
+  view uses stated timing assumptions; it is not a confirmed payout schedule.
+- Shopping supports a Still to buy view, quantities, target dates, and expandable
+  tier comparisons. Paid amounts are the total across all units, not per-unit.
+- Undo and change history cover the latest 30 changes in this page session.
+  They are not a shared activity log and disappear when the page closes.
+- Import validates the file and previews its record counts. Merge retains other
+  answers; Replace is offered only for browser-local plans. Undo is available.
+- If browser storage fails, the app keeps unsaved edits in memory and displays
+  an export warning. Export before closing the page in that situation.
+
+GitHub Pages still has no live multi-device sync or sign-in. Those require a
+separate backend. The published initial-plan.json remains a public snapshot.
+
+## Regression checks
+
+Install Playwright in your development environment and make a supported browser
+available, then run `node tests/regression.cjs` and `node tests/reliability.cjs`. By default it uses Microsoft
+Edge; set `AVERY_BROWSER=chromium` for Playwright’s bundled Chromium. If
+Playwright is installed elsewhere, set `AVERY_PLAYWRIGHT` to its package path.
+The checks intercept all app requests and use isolated browser storage, leaving
+real answers untouched. Rebuild with `python build-local.py` before testing.
