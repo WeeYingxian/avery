@@ -40,6 +40,14 @@ It is real data, not fixtures. Do not edit it, and be careful driving the UI in
 a browser, because **every click writes to it**. It is gitignored, along with
 `plan-state.before-merge.json`.
 
+`initial-plan.json` is the committed snapshot of those answers, and the two
+copies of the app are meant to say the same things. It seeds an empty browser
+on GitHub Pages, and `server.py` starts from it when `plan-state.json` is
+missing — only missing, because clearing the answers writes an empty file and
+that is a choice, not a loss. `publish-plan.py` sends answers the other way,
+into the snapshot, for a commit the user makes themselves. The snapshot is
+served publicly, so never publish without being asked to.
+
 ## Verifying changes
 
 Use the browser regression checks described in README.md. Run them with an

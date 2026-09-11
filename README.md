@@ -41,8 +41,8 @@ One plain text file in this folder. You can open it in Notepad. Both of you
 write to the same file, which is what makes the Wi-Fi sharing actually
 shared rather than two separate copies.
 
-It lives in OneDrive, so it is backed up automatically and you can right-click
-→ **Version history** to recover an earlier state.
+Nothing backs this file up for you. Use **Back up a copy** under **Share &
+storage** now and then and keep the copy somewhere else.
 
 GitHub Pages serves the app as a static website. An empty browser starts with
 the recovered answers in `initial-plan.json`. This snapshot is committed to
@@ -50,6 +50,24 @@ the repository and publicly accessible on the website. Existing browser
 answers are preserved. Subsequent changes save only in that browser on that
 device; they do not sync with the repository, local server, or other devices.
 Use **Back up a copy** and **Restore from a backup** to transfer later changes.
+
+The server here starts from that same snapshot when `plan-state.json` is
+missing, so the copy at home and the website open on the same answers instead
+of one of them looking blank. Once the file exists it is the record: clearing
+your answers writes an empty file, and an empty file stays empty.
+
+### Making the website say the same things
+
+The website only shows what was last published. After a round of decisions:
+
+```bash
+python publish-plan.py
+```
+
+That copies your current answers into `initial-plan.json` and tells you the
+commit to run. It sends nothing anywhere by itself — but the commit does: the
+snapshot ships with the site, so every answer in it, notes included, becomes
+readable by anyone who opens the page.
 
 The published link on claude.ai keeps its own separate copy on Claude's
 servers, so it works away from home but does not sync with this file. Pick one
@@ -95,6 +113,8 @@ Two things worth knowing about how it behaves:
 | `index.html` | Built copy the server serves. Do not edit — it gets overwritten |
 | `build-local.py` | Rebuilds `index.html` from the source |
 | `server.py` | The local server and the shared-state store |
+| `publish-plan.py` | Copies your answers into `initial-plan.json` for the website |
+| `initial-plan.json` | The published answers. Seeds an empty browser, and this computer |
 | `start-avery-plan.cmd` | What the desktop shortcut runs |
 | `make-icon.py` | Regenerates `avery.ico` |
 | `plan-state.json` | Your answers |
@@ -125,8 +145,9 @@ git add -A && git commit -m "what changed" && git push
 **The recovered answers are included in `initial-plan.json`.** This is the
 starting snapshot published to GitHub Pages. The local live `plan-state.json`
 and its before-merge snapshot remain ignored. Later edits are not pushed or
-shared automatically. To move newer answers, use **Back up a copy** under
-**Share & storage** and carry the file across.
+shared automatically. Run `python publish-plan.py` to bring the snapshot up to
+date, or use **Back up a copy** under **Share & storage** to carry a file
+across by hand.
 
 ---
 

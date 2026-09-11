@@ -22,19 +22,49 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 STATE_FILE = HERE / "plan-state.json"
+SNAPSHOT_FILE = HERE / "initial-plan.json"
 PAGE = HERE / "index.html"
 KEYS = ("settings", "tasks", "buys", "checks")
 
 _lock = threading.Lock()
 
 
+def blank_state():
+    return {"rev": 0, **{k: {} for k in KEYS}}
+
+
+def seeded_state():
+    """What this computer starts from when it has no answers of its own.
+
+    The page seeds an empty browser from initial-plan.json, which is how the
+    website opens on the published answers instead of a blank plan. Do the
+    same here, or the two copies disagree: the website shows the decisions and
+    the one at home looks like nothing was ever discussed.
+
+    Only a *missing* file seeds. Clearing your answers in the app writes an
+    empty file, and an empty file stays empty rather than refilling itself.
+    """
+    state = blank_state()
+    try:
+        snapshot = json.loads(SNAPSHOT_FILE.read_text(encoding="utf-8"))
+    except (ValueError, OSError):
+        return state
+    if not isinstance(snapshot, dict):
+        return state
+    for key in KEYS:
+        value = snapshot.get(key)
+        if isinstance(value, dict):
+            state[key] = value
+    return state
+
+
 def load_state():
     if not STATE_FILE.exists():
-        return {"rev": 0, **{k: {} for k in KEYS}}
+        return seeded_state()
     try:
         data = json.loads(STATE_FILE.read_text(encoding="utf-8"))
     except (ValueError, OSError):
-        return {"rev": 0, **{k: {} for k in KEYS}}
+        return blank_state()
     data.setdefault("rev", 0)
     for k in KEYS:
         if not isinstance(data.get(k), dict):
@@ -173,7 +203,11 @@ def main():
         print("Anyone on this network with that address can read and edit the plan.")
     else:
         print("Local only. Drop --local to share over Wi-Fi.")
-    print(f"Shared state: {STATE_FILE.name}")
+    if STATE_FILE.exists():
+        print(f"Shared state: {STATE_FILE.name}")
+    else:
+        print(f"Shared state: {STATE_FILE.name} (starting from {SNAPSHOT_FILE.name}, "
+              f"the same answers the website shows)")
     print("Keep this window open. Close it, or press Ctrl+C, to stop sharing.")
 
     if args.open:
