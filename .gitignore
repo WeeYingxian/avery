@@ -6,3 +6,4 @@ plan-state.before-merge.json
 # Local tooling
 .claude/
 __pycache__/
+img/

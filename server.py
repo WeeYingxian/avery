@@ -14,6 +14,7 @@ is no password. Run it on a home network, not a cafe one.
 
 import argparse
 import json
+import re
 import socket
 import threading
 import webbrowser
@@ -147,6 +148,12 @@ class Handler(BaseHTTPRequestHandler):
             if icon.exists():
                 return self._send(200, icon.read_bytes(), "image/x-icon")
             return self._send(404, "No icon", "text/plain")
+        if path.startswith("/img/"):
+            # Product photos live in a gitignored folder; only plain names.
+            name = path[5:]
+            if re.fullmatch(r"[a-z0-9]+\.jpg", name) and (HERE / "img" / name).exists():
+                return self._send(200, (HERE / "img" / name).read_bytes(), "image/jpeg")
+            return self._send(404, "No image", "text/plain")
         if path == "/api/state":
             return self._json(200, load_state())
         if path == "/api/net":

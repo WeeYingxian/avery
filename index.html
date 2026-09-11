@@ -180,6 +180,29 @@ nav.tabs{
 .tile .v{font-family:"Fraunces",serif; font-variation-settings:"SOFT" 50; font-weight:500; font-size:28px; font-variant-numeric:tabular-nums; letter-spacing:-.015em; line-height:1.15}
 .tile .n{font-size:11.5px; color:var(--muted); line-height:1.4}
 .tile.hero{background:linear-gradient(135deg,var(--accent-wash),var(--surface) 90%); border-color:transparent} .tile.hero .v{color:var(--accent-ink)}
+/* Overview: the five money decisions as one list of rows, and the
+   pre-conception actions as one-line summaries that open for the reasoning. */
+.dlist{padding:2px 18px}
+.drow{display:grid; grid-template-columns:minmax(120px,.8fr) minmax(0,1.6fr) auto; gap:14px; align-items:baseline; width:100%; padding:11px 0; min-height:44px; border:0; border-bottom:1px solid var(--line); background:none; text-align:left; font:inherit; color:inherit; cursor:pointer}
+.drow:last-child{border-bottom:0}
+.drow .dname{font-weight:600; font-size:13.5px}
+.drow:hover .dname{color:var(--accent-ink)}
+.drow .dval{font-size:12.5px; color:var(--muted); min-width:0}
+.drow .num{font-size:15px}
+.whylist{padding:2px 18px}
+.why{border-bottom:1px solid var(--line)}
+.why:last-child{border-bottom:0}
+.why summary{list-style:none; cursor:pointer; display:flex; gap:10px; align-items:center; min-height:44px; padding:8px 0; font-weight:600; font-size:13.5px}
+.why summary::-webkit-details-marker{display:none}
+.why summary::before{content:""; width:7px; height:7px; border-right:1.5px solid var(--faint); border-bottom:1.5px solid var(--faint); transform:rotate(-45deg); flex:none}
+.why[open] summary::before{transform:rotate(45deg)}
+.why .tiny{margin:0 0 12px 17px; max-width:70ch}
+.itemmore{background:var(--surface); padding:0 12px 4px 37px; border-bottom:0}
+.itemmore summary{min-height:32px; padding:2px 0 6px; font-size:12px; color:var(--muted)}
+.itemmore ul{margin:0 0 10px; padding-left:16px; font-size:12.5px; color:var(--ink-2); line-height:1.5; max-width:68ch}
+.itemmore li{margin:3px 0}
+.itemmore a{color:var(--accent-ink)}
+@media (max-width:640px){ .drow{grid-template-columns:1fr auto} .drow .dval{grid-column:1/-1; margin-top:-6px} }
 button.tile{font:inherit; text-align:left; cursor:pointer; width:100%}
 button.tile:hover{background:var(--surface-2)}
 button.tile.hero:hover{filter:brightness(1.03)}
@@ -210,6 +233,10 @@ td.n,th.n{text-align:right; font-variant-numeric:tabular-nums; white-space:nowra
 td.n{font-weight:500}
 tr.total td{border-top:1.5px solid var(--line); font-weight:600; background:var(--surface-2)}
 .tiny{font-size:11.5px; color:var(--muted); line-height:1.45}
+/* A paragraph is reading, a label is not: anything .tiny that runs to a
+   sentence inside a card, a fold or the "usually" block gets reading size. */
+.card p.tiny,.why p.tiny,.usually p.tiny,.t-learn,.refsec p.tiny{font-size:13px; color:var(--ink-2); line-height:1.55; max-width:68ch}
+.card .tiles .tiny,.card .tile .tiny{font-size:11.5px; color:var(--muted)}
 .est{font-size:10.5px; color:var(--warn); font-weight:700; letter-spacing:.05em; text-transform:uppercase; margin-left:4px}
 .note{font-size:12.5px; color:var(--muted); line-height:1.5; max-width:70ch}
 .callout{border-left:2.5px solid var(--accent); background:var(--accent-wash); padding:11px 14px; border-radius:0 8px 8px 0; font-size:13px; color:var(--ink-2); line-height:1.5}
@@ -342,23 +369,33 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
 .owncount .both{background:var(--surface-2); color:var(--muted)}
 
 /* ---------- active list ---------- */
+/* Folded by default: one line saying how many and what is next, so the
+   filters and the board sit right under the tiles. Open it to see the list. */
 .active{border:1px solid var(--line-soft); border-radius:var(--r); background:var(--surface); overflow:hidden; margin-bottom:20px; box-shadow:var(--shadow)}
-.active > .hd{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; padding:12px 15px; border-bottom:1px solid var(--line); background:var(--surface-2)}
-.active > .hd h3{font-size:16px; margin-right:auto}
-.act{display:flex; gap:11px; align-items:flex-start; padding:10px 15px; border-bottom:1px solid var(--line-soft); width:100%; text-align:left; background:none; border-left:0; border-right:0; border-top:0; cursor:pointer; font:inherit; color:inherit}
+.active > .hd{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:11px 15px; background:var(--surface-2); cursor:pointer; list-style:none; min-height:48px}
+.active > .hd::-webkit-details-marker{display:none}
+.active > .hd::before{content:""; width:7px; height:7px; border-right:1.5px solid var(--faint); border-bottom:1.5px solid var(--faint); transform:rotate(-45deg); margin-right:2px; flex:none}
+.active[open] > .hd{border-bottom:1px solid var(--line)}
+.active[open] > .hd::before{transform:rotate(45deg)}
+.active > .hd h3{font-size:15px}
+.active > .hd .next{font-size:12.5px; color:var(--muted); min-width:0; flex:1 1 220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.active > .hd .next b{color:var(--info); font-weight:700; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; margin-right:6px}
+.active > .hd .hint{font-size:11.5px; color:var(--faint); margin-left:auto}
+.active[open] > .hd .next{display:none}
+.act{display:flex; gap:11px; align-items:flex-start; padding:9px 15px; border-bottom:1px solid var(--line-soft); width:100%; text-align:left; background:none; border-left:0; border-right:0; border-top:0; cursor:pointer; font:inherit; color:inherit}
 .act:last-child{border-bottom:0}
 .act:hover{background:var(--surface-2)}
 .act .w{flex:none; font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:3px 8px; border-radius:5px; background:var(--info-wash); color:var(--info); min-width:104px; text-align:center}
 .act .w.guess{background:var(--surface-2); color:var(--faint); font-weight:600}
 .act .body{flex:1; min-width:0}
 .act .ttl{display:block; font-size:12px; color:var(--muted); line-height:1.35}
-.act .txt{display:block; font-size:13.5px; line-height:1.45; color:var(--ink); margin-top:2px; white-space:pre-wrap}
+.act .txt{display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-size:13px; line-height:1.45; color:var(--ink); margin-top:2px; white-space:pre-wrap}
 .act .who{flex:none; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px}
 .act .who.her{background:var(--accent-wash); color:var(--accent-ink)}
 .act .who.him{background:var(--gold-wash); color:var(--gold)}
 .act .who.both{background:var(--surface-2); color:var(--muted)}
 .active .empty{padding:14px 15px; font-size:12.5px; color:var(--muted); line-height:1.5}
-@media (max-width:640px){ .act{flex-wrap:wrap; gap:7px} .act .w{min-width:0} }
+@media (max-width:640px){ .act{flex-wrap:wrap; gap:7px} .act .w{min-width:0} .active > .hd .hint{display:none} }
 .t-notes,.t-learn{display:none}
 .task.open .t-notes{display:block}
 .task.learn .t-learn{display:grid}
@@ -397,7 +434,7 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
 .rail .meter i{display:block; height:100%; background:var(--accent); border-radius:2px}
 @media (max-width:900px){
   .withrail{grid-template-columns:1fr; gap:14px}
-  .rail{position:static; flex-direction:row; overflow-x:auto; max-height:none; gap:6px; padding-bottom:4px}
+  .rail{position:static; flex-direction:row; flex-wrap:wrap; max-height:none; gap:8px; padding-bottom:4px}
   .rail .railhead,.rail .meter{display:none}
   .rail button{width:auto; white-space:nowrap; border:1px solid var(--line); border-radius:99px; padding:8px 13px}
   .rail button[aria-current="true"]{border-color:transparent}
@@ -431,12 +468,40 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
 .linkbtn{appearance:none; background:none; border:0; padding:9px 2px; min-height:38px; color:var(--muted); font-size:12.5px; cursor:pointer; text-decoration:underline; text-underline-offset:3px}
 .linkbtn:hover{color:var(--accent-ink)}
 .filters{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:14px}
+/* Every filter that is not the topic rail lives in one bar: owner on one
+   line, tags on the next, each chip big enough to hit first time. */
+.filterbar{display:flex; flex-direction:column; gap:8px; margin-bottom:14px; padding:10px 12px; border:1px solid var(--line-soft); border-radius:var(--r); background:var(--surface-2)}
+.fgroup{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.fgroup .eyebrow{min-width:52px}
+.filterbar .chip{font-size:12.5px; padding:7px 13px; min-height:36px}
+.filterbar .chip[data-owner="Her"][aria-pressed="true"]{background:var(--accent-wash); color:var(--accent-ink)}
+.filterbar .chip[data-owner="Him"][aria-pressed="true"]{background:var(--gold-wash); color:var(--gold)}
 
 /* ---------- buy rows ---------- */
-.buy{background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--r); overflow:hidden; box-shadow:var(--shadow)}
+/* A card is a photo column and a content column. With Compare tiers closed
+   the chosen tier reads as one line, so a card is about four lines tall. */
+.buy{background:var(--surface); border:1px solid var(--line-soft); border-radius:var(--r); overflow:hidden; box-shadow:var(--shadow); display:grid; grid-template-columns:132px minmax(0,1fr); align-items:start}
+.buy > .buy-art{grid-column:1; grid-row:1 / span 8; width:auto; height:100%; min-height:118px; max-height:260px; border-radius:0; border-right:1px solid var(--line-soft); background:var(--surface-2)}
+.buy > :not(.buy-art){grid-column:2; min-width:0}
+.chosen-tier:not(.show-tiers) .tiers{background:none; border-top:1px solid var(--line-soft)}
+.chosen-tier:not(.show-tiers) .tier[aria-pressed="true"]{flex-direction:row; flex-wrap:wrap; align-items:baseline; gap:2px 10px; padding:7px 14px; background:none; box-shadow:none}
+.chosen-tier:not(.show-tiers) .tier[aria-pressed="true"] .pr{font-size:15px}
+.chosen-tier:not(.show-tiers) .tier[aria-pressed="true"] .wh::before{content:"\00b7 "}
+.buy .buy-extra{margin-left:auto; display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center; padding:0; border-top:0; font-size:12.5px}
+.buy .buy-extra label{display:flex; gap:5px; align-items:center; color:var(--muted)}
+.buy .buy-extra input[type=number]{width:54px; min-height:32px; padding:4px 6px}
+.buy .buy-extra input[type=date]{min-height:32px; padding:4px 6px; font-size:12.5px}
+.buy .buy-extra .btn{min-height:32px; padding:4px 10px; font-size:12.5px}
+@media (max-width:640px){ .buy{grid-template-columns:92px minmax(0,1fr)} .buy > .buy-art{max-height:none} .buy .buy-extra{margin-left:0} }
 .buy + .buy{margin-top:9px}
-.buy-head{display:flex; gap:12px; align-items:center; padding:11px 14px; border-bottom:1px solid var(--line-soft); flex-wrap:wrap}
+.buy-head{display:flex; gap:6px 12px; align-items:center; padding:9px 14px 4px; flex-wrap:wrap}
 .buy-head .nm{font-weight:600; font-size:14px}
+.buy-art{position:relative; width:64px; height:64px; flex:none; display:flex; align-items:center; justify-content:center; border-radius:10px; overflow:hidden; background:var(--accent-wash); color:var(--accent)}
+.buy-icon{width:34px; height:34px}
+.buy-art img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; background:#fff}
+.buy-art.has-photo img{opacity:1}
+.buy-art.has-photo .buy-icon{display:none}
+@media (max-width:640px){ .buy-art{width:52px; height:52px} }
 .buy-head .cat{margin-left:auto; display:flex; align-items:center; gap:9px}
 .tiers{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px; background:var(--line-soft)}
 .tier{
@@ -450,6 +515,12 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
 .tier .pr{font-size:17px; font-weight:600; font-variant-numeric:tabular-nums}
 .tier .pk{font-size:12.5px; line-height:1.4}
 .tier .wh{font-size:11px; color:var(--muted); line-height:1.4}
+.shoprow{display:flex; flex-wrap:wrap; gap:6px 8px; align-items:center; padding:7px 14px 9px; border-top:1px solid var(--line-soft); background:var(--surface)}
+.shoprow .eyebrow{margin-right:4px}
+.shop{display:inline-flex; align-items:center; min-height:30px; padding:3px 10px; border:1px solid var(--line); border-radius:99px; font-size:12px; color:var(--accent-ink); text-decoration:none}
+.shop::after{content:" \2197"; color:var(--faint); margin-left:3px}
+.shop:hover{border-color:var(--accent)}
+.shop.on{background:var(--accent-wash); border-color:transparent; font-weight:600}
 
 /* ---------- timeline ---------- */
 .tl{display:flex; flex-direction:column; gap:0}
@@ -533,6 +604,7 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
   .task[data-status="agreed"]:not(.open) .t-actions .linkbtn,
   .phase.folded .tiny .linkbtn{min-height:44px}
   .linkbtn,.task[data-status="agreed"]:not(.open) .t-actions .linkbtn{min-width:44px}
+  .filterbar .chip{min-height:44px}
   .opt{min-height:44px; align-items:center}
   .opt input{margin-top:0}
   #moneyInputs .ctrl{gap:6px 8px}
@@ -559,11 +631,14 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
 
 /* Planning controls */
 #planSettings summary{cursor:pointer; color:var(--muted); padding:8px 0; min-height:44px; font-size:13px}
-#planSettings{margin-bottom:12px}
+#planFooter{margin-top:44px; padding-top:8px; border-top:1px solid var(--line)}
+/* The search lives in the header row, as a pill beside the date. */
+.ctrl.search{flex:1 1 200px; max-width:340px}
+.ctrl.search input{flex:1; min-width:0; min-height:38px; padding:8px 14px; border:1px solid var(--line); border-radius:99px; background:var(--surface); color:var(--ink); font-size:14px}
+.ctrl.search .btn{min-height:38px; padding:6px 12px}
 .tool-row{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:14px 0; font-size:13px}
 .tool-row label,.budget-field{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
 .search-label{flex:1; min-width:0}
-#planSearch{width:100%; min-width:0; min-height:44px; padding:10px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink); font-size:16px}
 #searchResults{max-height:420px; overflow-y:auto; margin-bottom:14px}
 #weekSummary{margin-top:14px}
 .week-action{display:block; width:100%; text-align:left; padding:10px 12px; margin-top:7px; border:1px solid var(--line); border-radius:9px; background:var(--surface); color:var(--ink); cursor:pointer; font:inherit; min-height:44px}
@@ -580,7 +655,7 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
 .buy-extra input[type=number]{width:70px}
 .chosen-tier:not(.show-tiers) .tier[aria-pressed=false]{display:none}
 .task,.buy,.phase{scroll-margin-top:70px}
-@media(max-width:640px){.plan-dialog{padding:16px}.tool-row label{max-width:100%}.tool-row select{max-width:100%}.search-label{flex-basis:100%}.flow-row{font-size:12px}.plan-dialog input{max-width:100%}}
+@media(max-width:640px){.ctrl.search{flex-basis:100%; max-width:none}.ctrl.search input{font-size:16px; min-height:44px}.ctrl.search .btn{min-height:44px}.plan-dialog{padding:16px}.tool-row label{max-width:100%}.tool-row select{max-width:100%}.search-label{flex-basis:100%}.flow-row{font-size:12px}.plan-dialog input{max-width:100%}}
 </style>
 <header class="top">
   <div class="top-in">
@@ -593,6 +668,7 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
       <span class="mark">Avery Plan</span>
       <span class="sub">Singapore &middot; first baby</span>
     </div>
+    <div class="ctrl search" id="planSearchWrap"></div>
     <div class="ctrl">
       <label for="due">Due date</label>
       <input type="date" id="due" value="2027-09-15">
@@ -617,7 +693,6 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
   <div class="hero">
     <div>
       <h1>This week, together</h1>
-      <p class="lede">Your next steps, the decisions still to make, and the money to plan for.</p>
       <div id="weekSummary"></div>
     </div>
     <svg class="hero-art" viewBox="0 0 150 150" aria-hidden="true" focusable="false">
@@ -634,44 +709,36 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
   <div class="tiles" style="margin-top:20px" id="ovTiles"></div>
 
   <div class="sect">
-    <div class="head"><h3>The five decisions that move the money</h3></div>
-    <div class="grid g2" id="ovDecisions"></div>
+    <div class="head"><h3>The five decisions that move the money</h3><span class="tiny">Tap one to change it</span></div>
+    <div class="card flat dlist" id="ovDecisions"></div>
   </div>
 
-  <div class="sect">
-    <div class="head"><h3>What to do in the next 90 days</h3>
-      <span class="tiny">Pre-conception window &mdash; these are the ones that expire</span></div>
-    <div class="grid g2">
-      <div class="card">
-        <h4>Check the hospital plan is in force <em>before</em> you conceive</h4>
-        <p class="tiny" style="margin-top:6px">The Integrated Shield Plan is the one that has to already exist. Pregnancy becomes a pre-existing condition, and these plans carry a <strong>10-month waiting period</strong> before pregnancy complications are covered &mdash; so upgrading once you are pregnant does not help for this pregnancy. The action here is to verify what you already hold, not to buy something new.</p>
-        <p class="tiny" style="margin-top:6px">The standalone maternity plan is a separate thing, bought <em>during</em> pregnancy. That decision belongs in the second trimester.</p>
-      </div>
-      <div class="card">
-        <h4>Check your employment runway</h4>
-        <p class="tiny" style="margin-top:6px">Government-paid maternity leave needs 3 continuous months of service with your employer before the birth. If either of you is thinking of switching jobs, the timing matters.</p>
-      </div>
-      <div class="card">
-        <h4>Start folic acid now</h4>
-        <p class="tiny" style="margin-top:6px">400&micro;g daily, ideally from 3 months before conception. Also worth doing pre-conception: dental check, rubella/varicella immunity blood test, review of any long-term medication.</p>
-      </div>
-      <div class="card">
-        <h4>Agree the money rules together</h4>
-        <p class="tiny" style="margin-top:6px">Who pays what, public or private, how much goes into the CDA. The <strong>Talk it through</strong> tab has these as cards you can both tag, own and settle.</p>
-      </div>
+  <!-- Only while the pre-conception stage is open: these are the things that
+       expire once you conceive, so they vanish with the stage. -->
+  <div class="sect" id="ovPrecon">
+    <div class="head"><h3>Before you conceive</h3>
+      <span class="tiny">Four things that stop being possible later. Open one for the why.</span></div>
+    <div class="card flat whylist">
+      <details class="why"><summary>Check the hospital plan is in force before you conceive</summary>
+        <p class="tiny">The Integrated Shield Plan is the one that has to already exist. Pregnancy becomes a pre-existing condition, and these plans carry a <strong>10-month waiting period</strong> before pregnancy complications are covered &mdash; so upgrading once you are pregnant does not help for this pregnancy. Verify what you already hold; do not buy something new. The standalone maternity plan is separate, bought <em>during</em> pregnancy, and belongs in the second trimester.</p>
+      </details>
+      <details class="why"><summary>Check your employment runway</summary>
+        <p class="tiny">Government-paid maternity leave needs 3 continuous months of service with your employer before the birth. If either of you is thinking of switching jobs, the timing matters.</p>
+      </details>
+      <details class="why"><summary>Start folic acid now</summary>
+        <p class="tiny">400&micro;g daily, ideally from 3 months before conception. It is HealthHub advice rather than habit: in the S-PRESTO study, 51% of Singapore women trying to conceive were taking it. Also worth doing now: dental check, rubella/varicella immunity blood test, review of any long-term medication. Sources: <a href="https://www.healthxchange.sg/pregnancy/pre-pregnancy/planning-pregnancy-baby-folic-acid" target="_blank" rel="noopener">HealthXchange</a>, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9739604/" target="_blank" rel="noopener">S-PRESTO</a>. The full notes are on the task in Tasks by stage.</p>
+      </details>
+      <details class="why"><summary>Agree the money rules together</summary>
+        <p class="tiny">Who pays what, public or private, how much goes into the CDA. The <strong>Talk it through</strong> tab has these as cards you can both tag, own and settle.</p>
+      </details>
     </div>
-  </div>
-
-  <div class="sect">
-    <div class="head"><h3>Live snapshot</h3><span class="tiny">Updates as you make choices in the other tabs</span></div>
-    <div class="grid g2" id="ovSnapshot"></div>
   </div>
 </section>
 
 <!-- ============ MONEY ============ -->
 <section class="panel" id="p-money" role="tabpanel">
   <h1>Money</h1>
-  <p class="lede" style="margin-top:8px">Costs on the left, government money and MediSave on the right. Change the hospital or a shopping tier and every number here moves. Restricted money (CDA, MediSave) is kept separate from cash, because you cannot spend it on a stroller.</p>
+  <p class="lede" style="margin-top:8px">What it costs against what comes in. Restricted money (CDA, MediSave) is kept apart from cash.</p>
 
   <div class="card flat" style="margin-top:18px">
     <div class="eyebrow" style="margin-bottom:10px">Assumptions</div>
@@ -689,7 +756,7 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
   <div class="sect">
     <div class="head"><h3>Money coming in</h3><span class="tiny">Year one only &mdash; the rest of the $70k arrives later</span></div>
     <div class="tw"><table id="fundTable"></table></div>
-    <p class="note" style="margin-top:10px">CDA money can only be spent at approved institutions &mdash; childcare and preschool, MediSave-approved clinics and hospitals, optical shops, pharmacies, assistive devices and some insurance premiums. MediSave can only pay medical bills within withdrawal limits. Neither pays for prams, nannies or nappies.</p>
+    <p class="note" style="margin-top:10px">CDA pays approved institutions only: childcare, clinics, pharmacies, optical, some insurance. MediSave pays medical bills within limits. Neither buys a pram, a nanny or nappies.</p>
   </div>
 
   <div class="sect">
@@ -700,7 +767,7 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
 <!-- ============ TIMELINE ============ -->
 <section class="panel" id="p-timeline" role="tabpanel">
   <h1>Tasks by stage</h1>
-  <p class="lede" style="margin-top:8px">What has to happen, and when. The stage you are in is open; later stages stay folded until you reach them, and anything left behind from an earlier stage is pulled to the top. Add your own tasks to any stage; ticks and additions are shared between you both.</p>
+  <p class="lede" style="margin-top:8px">What has to happen, and when. Your stage is open; anything left from earlier is pulled to the top.</p>
   <div class="filters" id="tlView" style="margin-top:14px;margin-bottom:0"></div>
   <div id="tlCaveat" style="margin-top:14px"></div>
   <div class="tiles" style="margin-top:14px" id="tlTiles"></div>
@@ -713,23 +780,56 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
 <!-- ============ DISCUSS ============ -->
 <section class="panel" id="p-discuss" role="tabpanel">
   <h1>Talk it through</h1>
-  <p class="lede" style="margin-top:8px">One card per conversation. Tag what kind of arrangement it is, say who owns it, and record what you actually agreed &mdash; the agreement field is the point, not the checkbox. Both of you see the same board.</p>
+  <p class="lede" style="margin-top:8px">One card per conversation. What you write in the decision field is the point, not the status.</p>
   <div class="tiles" style="margin-top:18px" id="dsTiles"></div>
-  <div id="dsActive" style="margin-top:20px"></div>
+  <div id="dsActive" style="margin-top:16px"></div>
   <div class="withrail">
     <aside class="rail" id="dsRail" aria-label="Filter by topic"></aside>
     <div class="railmain">
-      <div class="filters" id="dsFilters"></div>
+      <div class="filterbar" id="dsFilters" aria-label="Filter by owner and tag"></div>
       <div id="dsScope"></div>
       <div class="tasklist" id="dsBody"></div>
     </div>
   </div>
 </section>
 
+<!-- One line icon per shopping item, drawn here so nothing is fetched
+     from another host. Stroke inherits currentColor. -->
+<svg style="display:none" aria-hidden="true" focusable="false">
+  <symbol id="ic-cot" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="11" rx="1.5"/><path d="M7 7v11M11 7v11M15 7v11M3 21v-3M21 21v-3"/></g></symbol>
+  <symbol id="ic-mattress" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="8" rx="2"/><path d="M3 12h18M8 8v8M16 8v8"/></g></symbol>
+  <symbol id="ic-bassinet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16l-2 6H6z"/><path d="M4 10c0-3 4-5 8-5s8 2 8 5"/><path d="M8 16l-2 5M16 16l2 5M5 21h14"/></g></symbol>
+  <symbol id="ic-bedding" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16v10H4z"/><path d="M4 13h16"/><path d="M6 9V6h12v3"/></g></symbol>
+  <symbol id="ic-pump" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h8l-3 5v3H8v-3z"/><rect x="13" y="10" width="6" height="10" rx="1.5"/><path d="M13 13h6"/></g></symbol>
+  <symbol id="ic-pumpkit" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h4v2h-4z"/><path d="M9 5h6l1 3H8z"/><rect x="8" y="8" width="8" height="13" rx="2"/><path d="M8 13h8M8 17h8"/></g></symbol>
+  <symbol id="ic-steriliser" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 7c0-1.5 1-1.5 1-3M12 7c0-1.5 1-1.5 1-3M16 7c0-1.5 1-1.5 1-3"/><path d="M8 14h8"/></g></symbol>
+  <symbol id="ic-warmer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h12v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path d="M17 12h2a2 2 0 0 1 0 4h-2"/><path d="M8 10V6h6v4"/></g></symbol>
+  <symbol id="ic-nursingpillow" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8c0 6 4 10 10 10 3 0 6-1 6-3-3 0-6-1-7-4s-1-6 0-8c-6 0-9 2-9 5z"/></g></symbol>
+  <symbol id="ic-formula" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="12" height="15" rx="1.5"/><path d="M4 10h12M6 6V4h8v2"/><path d="M18 20h3v-4a1.5 1.5 0 0 0-3 0z"/></g></symbol>
+  <symbol id="ic-stroller" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h2l2 7h11"/><path d="M8 11c0-4 3-7 7-7h4v7a3 3 0 0 1-3 3H8z"/><circle cx="9" cy="19" r="2"/><circle cx="17" cy="19" r="2"/><path d="M11 19h4"/></g></symbol>
+  <symbol id="ic-carseat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16v3a7 7 0 0 1-7 7h-2a7 7 0 0 1-7-7z"/><path d="M7 10V6a5 5 0 0 1 10 0v4"/></g></symbol>
+  <symbol id="ic-carrier" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2"/><path d="M7 21v-8a5 5 0 0 1 10 0v8"/><path d="M9 12h6v6H9z"/></g></symbol>
+  <symbol id="ic-diaperbag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="14" rx="3"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/><path d="M5 13h14"/><path d="M10 13v3h4v-3"/></g></symbol>
+  <symbol id="ic-monitor" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="11" rx="2"/><path d="M9 21h6M12 17v4"/><path d="M9.5 11a3.5 3.5 0 0 1 5 0"/><circle cx="12" cy="12.5" r=".8"/></g></symbol>
+  <symbol id="ic-bath" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18v3a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5z"/><path d="M5 12V6a2 2 0 0 1 4 0"/><path d="M6 20l-1 2M18 20l1 2"/></g></symbol>
+  <symbol id="ic-thermo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4a2 2 0 0 1 4 0v9a3.5 3.5 0 1 1-4 0z"/><path d="M12 8v6"/></g></symbol>
+  <symbol id="ic-grooming" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="6" rx="2"/><path d="M8 15v3M11 15v3M14 15v3M17 15v3"/></g></symbol>
+  <symbol id="ic-playmat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20c0-8 3-13 7-13s7 5 7 13"/><path d="M9 12v3M12 10v3M15 12v3"/><circle cx="9" cy="16" r="1"/><circle cx="12" cy="14" r="1"/><circle cx="15" cy="16" r="1"/></g></symbol>
+  <symbol id="ic-bouncer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c0-5 3-10 8-13 3-2 6-2 8 0"/><path d="M6 20h14"/><path d="M8 9c2 4 8 4 12 1"/></g></symbol>
+  <symbol id="ic-whitenoise" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="10" height="10" rx="2"/><circle cx="10" cy="12" r="2"/><path d="M18 9a4 4 0 0 1 0 6M20 7a7 7 0 0 1 0 10"/></g></symbol>
+  <symbol id="ic-nappies" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v5a8 8 0 0 1-8 8 8 8 0 0 1-8-8z"/><path d="M4 9h16"/></g></symbol>
+  <symbol id="ic-wipes" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M8 9V6l3 2 2-2 3 2V9"/><path d="M9 14h6"/></g></symbol>
+  <symbol id="ic-clothes" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l4 4-2 2-1-1v7a6 6 0 0 1-3 3h-4a6 6 0 0 1-3-3V8L6 9 4 7z"/><path d="M10 3c0 2 4 2 4 0"/></g></symbol>
+  <symbol id="ic-skincare" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="9" width="8" height="12" rx="2"/><path d="M11 9V6h2v3"/><path d="M12 6V4h4"/></g></symbol>
+  <symbol id="ic-changing" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="4" rx="1"/><path d="M5 11v10M19 11v10M5 15h14M5 18h14"/></g></symbol>
+  <symbol id="ic-room" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M4 8h16M8 8c0 4 0 8 2 12M16 8c0 4 0 8-2 12"/></g></symbol>
+  <symbol id="ic-maternity" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l1 4-2 2 5 12H5L10 9 8 7z"/></g></symbol>
+  <symbol id="ic-postnatal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/><path d="M12 8v6M9 11h6"/></g></symbol>
+</svg>
 <!-- ============ BUY ============ -->
 <section class="panel" id="p-buy" role="tabpanel">
   <h1>What to buy</h1>
-  <p class="lede" style="margin-top:8px">Three tiers per item, Singapore prices, and where to actually get it. Pick a tier and the total flows straight into the Money tab. Choose <em>Skip</em> for anything you would rather borrow, inherit or do without.</p>
+  <p class="lede" style="margin-top:8px">Three tiers per item at Singapore prices. Pick one, or <em>Skip</em> what you will borrow or inherit.</p>
   <div class="tiles" style="margin-top:18px" id="byTiles"></div>
   <div class="withrail">
     <aside class="rail" id="byRail" aria-label="Filter by category"></aside>
@@ -739,13 +839,14 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
     </div>
   </div>
   <div class="sect">
-    <div class="head"><h3>Buying notes</h3></div>
-    <div class="grid g2">
-      <div class="card"><h4>Buy the car seat new</h4><p class="tiny" style="margin-top:6px">A second-hand seat has an unknown crash history and shells degrade with age and heat. This is the one category where Carousell is a false economy. Check ISOFIX anchor points in your own car before choosing, and note that Singapore law requires a child restraint in a private car.</p></div>
-      <div class="card"><h4>Buy the pump from a local distributor</h4><p class="tiny" style="margin-top:6px">Grey-market Spectra and Elvie units are common on marketplaces and carry no local warranty or servicing. A motor failure at week three with no warranty is expensive misery. Mothercare, Motherswork and the brands' official Lazada and Shopee stores are the safe routes.</p></div>
-      <div class="card"><h4>Premium prams hold value</h4><p class="tiny" style="margin-top:6px">Bugaboo, Stokke, UPPAbaby and Joolz retain roughly 50&ndash;70% on Carousell. If you want a premium pram, the real cost over two years is closer to a mid-range one. The reverse is also true &mdash; buying one second-hand is low risk.</p></div>
-      <div class="card"><h4>Delay what you can</h4><p class="tiny" style="margin-top:6px">Bouncers, high chairs, playmats and most toys are month-four-onwards purchases. Newborn clothes are outgrown in weeks, and you will be given a lot of them. Wash nothing you might return until the baby is here.</p></div>
+    <div class="head"><h3>Before you buy</h3><span class="tiny">Four rules. Open one for the why.</span></div>
+    <div class="card flat whylist">
+      <details class="why"><summary>Buy the car seat new</summary><p class="tiny">A second-hand seat has an unknown crash history and shells degrade with age and heat. This is the one category where Carousell is a false economy. Check ISOFIX anchor points in your own car before choosing, and note that Singapore law requires a child restraint in a private car.</p></details>
+      <details class="why"><summary>Buy the pump from a local distributor</summary><p class="tiny">Grey-market Spectra and Elvie units are common on marketplaces and carry no local warranty or servicing. A motor failure at week three with no warranty is expensive misery. Mothercare, Motherswork and the brands' official Lazada and Shopee stores are the safe routes.</p></details>
+      <details class="why"><summary>Premium prams hold value</summary><p class="tiny">Bugaboo, Stokke, UPPAbaby and Joolz retain roughly 50&ndash;70% on Carousell. If you want a premium pram, the real cost over two years is closer to a mid-range one. The reverse is also true &mdash; buying one second-hand is low risk.</p></details>
+      <details class="why"><summary>Delay what you can</summary><p class="tiny">Bouncers, high chairs, playmats and most toys are month-four-onwards purchases. Newborn clothes are outgrown in weeks, and you will be given a lot of them. Wash nothing you might return until the baby is here.</p></details>
     </div>
+  </div>
   </div>
 </section>
 
@@ -755,7 +856,7 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
 <!-- ============ REFERENCE ============ -->
 <section class="panel" id="p-reference" role="tabpanel">
   <h1>Reference</h1>
-  <p class="lede" style="margin-top:8px">The background reading: what the government gives, what a delivery costs, who can help afterwards, and where every number comes from. Nothing here is a setting &mdash; you change hospital, help and childcare on the Money tab.</p>
+  <p class="lede" style="margin-top:8px">The background reading. Nothing here is a setting; choices are made on the Money tab.</p>
   <div class="withrail">
     <aside class="rail" id="rfRail" aria-label="Jump to a section"></aside>
     <div class="railmain">
@@ -944,7 +1045,7 @@ ul.clean{margin:0; padding-left:18px} ul.clean li{margin:3px 0}
     </div>
   </div>
 </section>
-
+<div id="planFooter"></div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
@@ -1034,6 +1135,46 @@ const SRC=[
 
 const CATS=["Sleep","Feeding","Out of the house","Daily care","Consumables","Nursery","For mum"];
 const T=(p,pick,where,est)=>({p:p,pick:pick,where:where,est:!!est});
+/* Search terms per tier. Most tiers name a product, so the first clause of
+   the pick is the search; the generic ones get a term here. Listing links go
+   stale and cannot be checked from inside the page, so every link is a
+   search, never a specific listing. Shopee's own search page asks for a
+   login, so the search runs on Google Shopping, which shows pictures and
+   prices without one. Skipped tiers get no link. */
+const SHOP_TERMS={
+ "cot.m":"convertible baby cot toddler bed","mattress.b":"IKEA cot mattress","mattress.m":"baby cot latex mattress",
+ "mattress.p":"natural latex cot mattress dual firmness","bassinet.m":"bedside sleeper co-sleeper crib",
+ "bedding.b":"cot fitted sheet waterproof protector","bedding.m":"bamboo cot fitted sheet",
+ "bedding.p":"organic cotton cot sheet set sleep sack","pump.b":"Medela Harmony manual breast pump",
+ "pump.m":"Spectra S1 Plus","pump.p":"Elvie Stride wearable breast pump",
+ "pumpkit.b":"baby bottles starter set","pumpkit.m":"PPSU baby bottles breast milk storage bags",
+ "pumpkit.p":"PPSU glass baby bottle set cooler bag","steriliser.b":"microwave steriliser bags",
+ "steriliser.p":"Philips Avent Premium steriliser dryer","warmer.m":"Philips Avent bottle warmer",
+ "nursingpillow.m":"My Brest Friend nursing pillow","nursingpillow.p":"Boppy nursing pillow",
+ "formula.b":"infant formula stage 1","formula.m":"infant formula stage 1","formula.p":"infant formula stage 1 premium",
+ "carseat.b":"Chicco Kory Essential i-Size","carrier.b":"baby ring sling",
+ "diaperbag.m":"diaper backpack insulated changing mat","diaperbag.p":"Storksak diaper bag",
+ "monitor.m":"baby monitor video night vision","monitor.p":"Nanit Pro baby monitor",
+ "bath.b":"baby bath basin support","bath.m":"baby bath tub newborn support","bath.p":"baby bath tub with stand",
+ "thermo.b":"digital thermometer baby","thermo.m":"infrared forehead thermometer",
+ "grooming.b":"baby grooming kit","grooming.m":"baby grooming kit nasal aspirator","grooming.p":"Frida electric nasal aspirator",
+ "playmat.b":"baby foam play mat toy arch","playmat.m":"baby activity gym play mat","playmat.p":"Lovevery play kit",
+ "whitenoise.m":"white noise machine baby","whitenoise.p":"Hatch Rest",
+ "nappies.b":"newborn tape diapers","nappies.m":"Merries newborn tape diapers","nappies.p":"Japanese tape diapers newborn",
+ "wipes.b":"baby wipes unscented carton","wipes.m":"WaterWipes carton","wipes.p":"WaterWipes carton",
+ "clothes.b":"newborn bodysuit sleepsuit muslin","clothes.m":"newborn cotton bodysuit muslin swaddle",
+ "clothes.p":"organic cotton newborn set muslin swaddle","skincare.b":"baby wash barrier cream",
+ "skincare.m":"Cetaphil Baby wash lotion","skincare.p":"baby skincare eczema range",
+ "changing.b":"baby changing mat","changing.m":"IKEA changing table","changing.p":"baby dresser changing top",
+ "room.m":"blackout curtains","room.p":"HEPA air purifier",
+ "maternity.b":"nursing bra maternity basics","maternity.m":"maternity work wear nursing bra","maternity.p":"maternity nursing wardrobe",
+ "postnatal.b":"maternity pads peri bottle nipple cream","postnatal.m":"postpartum belly binder underwear","postnatal.p":"postpartum belly binder"
+};
+function shopTerm(it,k){
+  const d=it[k]; if(!d||!d.p) return "";
+  return SHOP_TERMS[it.id+"."+k]||d.pick.split(/,| plus | or | \(|\.|;/)[0].trim().split(/\s+/).slice(0,6).join(" ");
+}
+function shopUrl(term){ return "https://www.google.com/search?tbm=shop&q="+encodeURIComponent(term+" Singapore") }
 const ITEMS=[
  {id:"cot",n:"Cot",cat:"Sleep",def:"budget",why:"Needed from about month four, once the baby outgrows a bassinet. A cot that converts to a toddler bed lasts to age four or five.",
   b:T(89,"IKEA SNIGLAR, solid birch, 60x120cm","IKEA Singapore"),
@@ -1512,10 +1653,22 @@ TASKS.push({id:"q60",g:"Health and us",t:"How we handle the cats",
 
 const PHASES=[
  {id:"pre",t:"Before you conceive",w:[-24,2],sub:"The window that closes. Insurance and immunity work has to happen now.",i:[
-  ["pre1","Start folic acid, 400 micrograms daily","Ideally three months before conception. Reduces neural tube defect risk."],
-  ["pre2","Pre-conception check for both of you","Blood tests, blood pressure, weight, and a review of any long-term medication with your GP."],
-  ["pre3","Rubella and varicella immunity blood test","If you are not immune, you need the vaccine and then a wait before conceiving. This one has a hard lead time."],
-  ["pre4","Dental check and any treatment","Gum disease is linked to preterm birth, and elective dental work is best done before pregnancy."],
+  ["pre1","Start folic acid, 400 micrograms daily","HealthHub advice is to start three months before conception; about half of Singapore women trying to conceive already take it. Cheap, and the one that only works if started early.",[
+    "The guideline: 400 micrograms a day from three months before conception until week 12. The neural tube closes in the first 28 days, usually before a test turns positive, which is why starting after the test is too late for this part.",
+    "What couples actually do: in Singapore's S-PRESTO study of 908 women trying to conceive, 467 (51%) were already taking folic acid and 68% took some supplement. So about half, not most.",
+    ["HealthXchange (SingHealth): take folic acid before you conceive","https://www.healthxchange.sg/pregnancy/pre-pregnancy/planning-pregnancy-baby-folic-acid"],
+    ["SingHealth: prenatal supplements","https://www.singhealth.com.sg/symptoms-treatments/pregnancy-prenatal-supplements"],
+    ["S-PRESTO cohort: dietary supplement intake and fecundability, 2022","https://pmc.ncbi.nlm.nih.gov/articles/PMC9739604/"]
+  ]],
+  ["pre2","Pre-conception check for both of you","Recommended, not universal: many couples skip it and have the same bloods at the first antenatal visit. Doing it now catches the things with lead time, and covers a review of any long-term medication.",[
+    "A typical pre-conception screen: full blood count, blood group and Rh, hepatitis B and C, HIV, syphilis, rubella and varicella immunity, cervical screening if due, and a medication review. The same panel is run at the first antenatal visit for anyone who skipped it.",
+    ["SMG Women's Health: tests to consider before conceiving","https://smgwomenshealth.sg/news-articles/5-pre-pregnancy-tests-and-health-checks-to-consider-before-conceiving/"]
+  ]],
+  ["pre3","Rubella and varicella immunity blood test","Usually part of the pre-conception check. If not immune, you need the vaccine and then a wait before conceiving, so this one has a hard lead time.",[
+    "Childhood vaccination immunity can fade. If the test shows no immunity, the MMR jab is given and pregnancy is deferred for a month; varicella needs two doses. That wait is why this sits before conception rather than at the first antenatal visit.",
+    ["SMG Women's Health: tests to consider before conceiving","https://smgwomenshealth.sg/news-articles/5-pre-pregnancy-tests-and-health-checks-to-consider-before-conceiving/"]
+  ]],
+  ["pre4","Dental check and any treatment","Standard advice, and one most couples do not follow. Elective dental work is easier before pregnancy, and gum disease is linked to preterm birth."],
   ["pre5","Check the hospital plan is already in force","The Integrated Shield Plan has a 10-month waiting period on pregnancy complications, so upgrading after conception will not help this pregnancy. Verify what you hold, and review life and income protection while you are at it."],
   ["pre6","Confirm three months of continuous service","Government-paid maternity leave requires it. Delay any job move if it puts this at risk."],
   ["pre7","Both cats microchipped and licensed","Done. Two cats is exactly the HDB limit, so nothing further to do here."],
@@ -2185,7 +2338,7 @@ function renderMoney(){
       ? "<div class='callout' style='margin-bottom:10px'>Your board says <strong>"+esc(bmap.hosp.text)+"</strong> without naming a ward, so the ward below is still a guess and it changes the bill a lot. At KKH a vaginal delivery runs "+money(1486)+" in subsidised Ward B2 against "+money(5780)+" in Ward A.</div>"
       : "")+
     (m.assumed.length
-      ? "<div class='callout warn'><strong>"+m.assumed.length+" of the settings below are still our starting guesses, not your decisions.</strong> They are there so the totals are not empty. Anything marked <span class='pill warn'>assumed</span> has never been chosen by either of you &mdash; change it, or click the badge to keep it, and the badge clears.</div>"
+      ? "<div class='callout warn'><strong>"+m.assumed.length+" of the settings below are still starting guesses.</strong> Change anything marked <span class='pill warn'>assumed</span>, or click the badge to keep it.</div>"
       : "");
   els("[data-usewant]",el("#moneyCaveat")).forEach(b=>b.addEventListener("click",()=>{
     const k=b.dataset.usewant, raw=b.dataset.val;
@@ -2286,7 +2439,16 @@ function checked(id){ return !!S.checks[id] }
 function itemRow(x,idPrefix){
   const id=x[0], on=checked(id);
   return "<label class='item"+(on?" done":"")+"'><input type=checkbox id='ck-"+(idPrefix||"")+id+"' data-chk='"+id+"'"+(on?" checked":"")+
-    "><span class=lb>"+x[1]+(x[2]?"<span class=sm>"+x[2]+"</span>":"")+"</span></label>";
+    "><span class=lb>"+x[1]+(x[2]?"<span class=sm>"+x[2]+"</span>":"")+"</span></label>"+
+    (x[3]&&x[3].length?moreFold(x[3]):"");
+}
+/* The research behind an item: plain lines, or [label, url] pairs that open
+   the source. Sits outside the label so opening it does not tick the box. */
+function moreFold(more){
+  return "<details class='why itemmore'><summary>Where this comes from</summary><ul class=clean>"+
+    more.map(m=>Array.isArray(m)
+      ? "<li><a href=\""+esc(m[1])+"\" target=_blank rel=noopener>"+m[0]+"</a></li>"
+      : "<li>"+m+"</li>").join("")+"</ul></details>";
 }
 function customRow(c,idPrefix){
   return "<label class='item"+(c.v.done?" done":"")+"'><input type=checkbox id='ck-"+(idPrefix||"")+c.k+"' data-chk='"+c.k+"'"+(c.v.done?" checked":"")+
@@ -2411,7 +2573,7 @@ function renderTimeline(){ /* the Tasks by stage tab */
   el("#tlCaveat").innerHTML=paper
     ? "<p class=note>The paperwork, in the order it has to happen. Ticks here are the same ticks as in the stage view &mdash; one box per job.</p>"
     : now<2
-    ? "<div class='callout warn'><strong>These are not real dates yet.</strong> The due date in the header is a placeholder so the plan has a shape. Only <strong>"+cur.t+"</strong> applies today"+(focus?"; later stages are folded away until you reach them":"; the later stages are shown as week numbers until a dating scan gives you real dates")+".</div>"
+    ? "<div class='callout warn'><strong>Placeholder due date.</strong> Only <strong>"+cur.t+"</strong> applies today; "+(focus?"later stages stay folded":"later stages show week numbers")+" until a dating scan gives real dates.</div>"
     : "";
   el("#tlTiles").innerHTML=
    tile(now<2?"Placeholder due date":"Due",fmt(dueDate()),now<2?"Not confirmed. Change it in the header":"Change it in the header","hero")+
@@ -2529,6 +2691,9 @@ const ST=[["todo","To discuss"],["discussing","Discussing"],["agreed","Agreed"],
 const OWN=["Both","Her","Him"];
 /* Three independent filters: the status tiles, the topic rail, the tag chips. */
 let dsFilter="All", dsTag="All", dsStatus="all";
+/* The to-do list folds by default and stays however it was last left for
+   the rest of the session. */
+let dsActiveOpen=false;
 /* _open gets set as a side effect of typing notes. For settled cards that is
    not a request to keep them expanded, so they always start collapsed and
    expand only when someone clicks in this session. */
@@ -2547,28 +2712,36 @@ function renderDiscuss(){
   /* Agreed with nothing written down is not really settled. Say so. */
   const recorded=TASKS.filter(t=>{const s=taskState(t.id); return (s.status||"todo")==="agreed"&&remarkOf(s)}).length;
   const blank=counts.agreed-recorded;
+  const live=TASKS.length-counts.parked;
+  const settledNote=[
+    blank?blank+" marked agreed with nothing written down":"All with an outcome recorded",
+    counts.parked?counts.parked+" parked, not counted":""
+  ].filter(Boolean).join(" &middot; ");
   el("#dsTiles").innerHTML=
-   ftile("agreed","Settled",counts.agreed+" / "+TASKS.length,blank?blank+" marked agreed with nothing written down":"All with an outcome recorded","hero")+
+   ftile("agreed","Settled",counts.agreed+" / "+live,settledNote,"hero")+
    ftile("todo","Still to discuss",String(counts.todo),"Not started yet","")+
    ftile("discussing","Being discussed",String(counts.discussing),"Raised but not settled","")+
-   ftile("parked","Parked",String(counts.parked),"Deliberately deferred","");
+   ftile("parked","Parked",String(counts.parked),"Set aside for later, outside the count","");
   els("[data-st]",el("#dsTiles")).forEach(b=>b.addEventListener("click",()=>{
     dsStatus=(dsStatus===b.dataset.st)?"all":b.dataset.st; renderDiscuss();
   }));
 
   const act=activeItems();
   const own=o=>o==="Her"?"her":o==="Him"?"him":"both";
-  el("#dsActive").innerHTML="<div class=active>"+
-    "<div class=hd><h3>What needs doing</h3>"+
-      "<span class=tiny>Built from what you have written on the cards below</span>"+
-      "<span class='pill acc'>"+act.length+"</span></div>"+
+  const nxt=act[0];
+  el("#dsActive").innerHTML="<details class=active"+(dsActiveOpen?" open":"")+">"+
+    "<summary class=hd><h3>What needs doing</h3>"+
+      "<span class='pill acc'>"+act.length+"</span>"+
+      "<span class=next>"+(nxt?"<b>"+WHENLBL[nxt.when]+"</b>"+esc(nxt.t.t):"Nothing due yet")+"</span>"+
+      "<span class=hint>"+(dsActiveOpen?"Built from what you wrote on the cards":"Open to see all")+"</span></summary>"+
     (act.length
       ? act.map(a=>"<button class=act type=button data-jump='"+a.t.id+"'>"+
           "<span class='w"+(a.guessed?" guess":"")+"'>"+WHENLBL[a.when]+"</span>"+
           "<span class=body><span class=ttl>"+a.t.t+"</span><span class=txt>"+esc(a.remark)+"</span></span>"+
           "<span class='who "+own(a.owner)+"'>"+a.owner+"</span></button>").join("")
       : "<p class=empty>Nothing yet. Write a decision or a note on any card below and say when it has to happen &mdash; it will show up here, sorted by when it is due.</p>")+
-    "</div>";
+    "</details>";
+  el("#dsActive details").addEventListener("toggle",e=>{dsActiveOpen=e.target.open; el("#dsActive .hint").textContent=dsActiveOpen?"Built from what you wrote on the cards":"Open to see all"});
   els("[data-jump]",el("#dsActive")).forEach(b=>b.addEventListener("click",()=>{
     if(dsFilter!=="All"||dsTag!=="All"||dsStatus!=="all"){ dsFilter="All"; dsTag="All"; dsStatus="all"; renderDiscuss(); }
     const card=el(".task[data-id='"+b.dataset.jump+"']");
@@ -2581,16 +2754,26 @@ function renderDiscuss(){
   }));
 
   const cats=TASKS.map(t=>t.g).filter((v,i,a)=>a.indexOf(v)===i);
-  const agreedIn=f=>TASKS.filter(t=>f(t)&&(taskState(t.id).status||"todo")==="agreed").length;
+  /* Same denominator as the tiles and the tab badge: parked is out. */
+  const stOf=t=>taskState(t.id).status||"todo";
+  const agreedIn=f=>TASKS.filter(t=>f(t)&&stOf(t)==="agreed").length;
+  const liveIn=f=>TASKS.filter(t=>f(t)&&stOf(t)!=="parked").length;
   renderRail(el("#dsRail"),"Topics",
-    [{id:"All",label:"Everything",done:agreedIn(()=>true),total:TASKS.length}].concat(
-      cats.map(c=>({id:c,label:c,done:agreedIn(t=>t.g===c),total:TASKS.filter(t=>t.g===c).length}))),
+    [{id:"All",label:"Everything",done:agreedIn(()=>true),total:liveIn(()=>true)}].concat(
+      cats.map(c=>({id:c,label:c,done:agreedIn(t=>t.g===c),total:liveIn(t=>t.g===c)}))),
     "filter",dsFilter,id=>{dsFilter=id; renderDiscuss()});
 
-  el("#dsFilters").innerHTML="<span class=eyebrow style='margin-right:4px'>Tagged</span>"+
-   TAGS.map(g=>"<button class=chip type=button data-f='"+g+"' aria-pressed='"+(dsTag===g)+"'>"+g+"</button>").join("");
+  const chip=(k,v,on,label)=>"<button class=chip type=button data-"+k+"='"+v+"' aria-pressed='"+on+"'>"+label+"</button>";
+  el("#dsFilters").innerHTML=
+   "<div class=fgroup role=group aria-label='Owner'><span class=eyebrow>Owner</span>"+
+     ["All","Her","Him","Both","Unassigned"].map(o=>chip("owner",o,dsOwner===o,o)).join("")+"</div>"+
+   "<div class=fgroup role=group aria-label='Tag'><span class=eyebrow>Tagged</span>"+
+     chip("f","All",dsTag==="All","All")+TAGS.map(g=>chip("f",g,dsTag===g,g)).join("")+"</div>";
+  els("[data-owner]",el("#dsFilters")).forEach(b=>b.addEventListener("click",()=>{
+    dsOwner=b.dataset.owner; renderDiscuss();
+  }));
   els("[data-f]",el("#dsFilters")).forEach(b=>b.addEventListener("click",()=>{
-    dsTag=(dsTag===b.dataset.f)?"All":b.dataset.f; renderDiscuss();
+    dsTag=(dsTag===b.dataset.f||b.dataset.f==="All")?"All":b.dataset.f; renderDiscuss();
   }));
   const bits=[];
   if(dsOwner!=="All") bits.push("owner <strong>"+esc(dsOwner)+"</strong>");
@@ -2601,7 +2784,7 @@ function renderDiscuss(){
     ? "<p class=note>Showing "+bits.join(", ")+". The counts above cover all "+TASKS.length+" conversations. <button class=linkbtn data-clearf type=button>Show everything</button></p>"
     : "";
   const cf=el("[data-clearf]",el("#dsScope"));
-  if(cf) cf.addEventListener("click",()=>{dsStatus="all"; dsFilter="All"; dsTag="All"; dsOwner="All"; el("#ownerFilter").value="All"; renderDiscuss()});
+  if(cf) cf.addEventListener("click",()=>{dsStatus="all"; dsFilter="All"; dsTag="All"; dsOwner="All"; renderDiscuss()});
 
   const ORDER={todo:0,discussing:1,parked:2,agreed:3};
   const BAND={todo:"Still to discuss",discussing:"Being discussed now",parked:"Parked for now",agreed:"Settled"};
@@ -2678,9 +2861,8 @@ function renderDiscuss(){
        (t.l&&t.l.length?"<div class=t-links>"+t.l.map(x=>"<a href=\""+esc(x[1])+"\" target=_blank rel=noopener>"+x[0]+"</a>").join("")+"</div>":"")+
        "</div>":"")+
      (t.opts&&t.opts.length?"<div class=usually>"+
-       "<span class=eyebrow>What couples usually do</span>"+
+       "<span class=eyebrow>What couples usually do &middot; tap any that apply</span>"+
        (t.norm?"<p class=tiny>"+t.norm+"</p>":"")+
-       "<p class=tiny style='color:var(--faint)'>Tap any that apply. They are recorded on the card as your decision.</p>"+
        "<div class=picks>"+t.opts.map(o=>
          "<button class=pick type=button data-pick=\""+esc(o)+"\" aria-pressed='"+(picks.indexOf(o)>-1)+"'>"+o+"</button>").join("")+
        "</div></div>":"")+
@@ -2776,14 +2958,22 @@ function renderBuy(){
         "<span class=wh>"+d.where+"</span></button>";
     };
     return "<div class=buy data-id='"+it.id+"'>"+
+      "<span class=buy-art><svg class=buy-icon aria-hidden=true><use href='#ic-"+it.id+"'/></svg>"+
+        "<img src='img/"+it.id+".jpg' alt='' loading=lazy onload=\"this.parentNode.classList.add('has-photo')\" onerror=\"this.remove()\"></span>"+
       "<div class=buy-head><span class=nm>"+it.n+"</span><span class='pill mute'>"+it.cat+"</span>"+
         "<span class=cat><span class=num style='font-size:13px'>"+money(buyPrice(it))+"</span>"+
         "<label class=sr for='ac-"+it.id+"'>What you actually paid for the "+it.n.toLowerCase()+"</label>"+
         "<input type=number id='ac-"+it.id+"' data-actual min=0 step=1 placeholder='paid?' title='Enter what you actually paid, and it replaces the estimate' style='width:82px' value='"+(typeof st.actual==="number"?st.actual:"")+"'>"+
         "<button class=chip data-skip aria-pressed='"+(tier==="skip")+"' aria-label='Skip the "+it.n.toLowerCase()+"'>Skip</button>"+
         "<label class='tiny' style='display:flex;align-items:center;gap:5px'><input type=checkbox data-bought"+(st.bought?" checked":"")+" aria-label='"+it.n+" &mdash; already bought'> bought</label></span></div>"+
-      "<p class=tiny style='padding:0 14px 10px'>"+it.why+"</p>"+
+      "<p class=tiny style='padding:0 14px 7px'>"+it.why+"</p>"+
       "<div class=tiers>"+cell("b","Budget")+cell("m","Mid")+cell("p","Premium")+"</div>"+
+      /* One Google Shopping search per tier, the chosen tier highlighted. */
+      "<div class=shoprow><span class=eyebrow>See prices</span>"+
+        [["b","budget"],["m","mid"],["p","premium"]].map(kt=>{
+          const q=shopTerm(it,kt[0]); if(!q) return "";
+          return "<a class='shop"+(tier===kt[1]?" on":"")+"' href='"+shopUrl(q)+"' target=_blank rel=noopener>"+esc(q)+"</a>";
+        }).join("")+"</div>"+
     "</div>";
   }).join("");
 
@@ -2811,13 +3001,17 @@ function renderBuy(){
 /* ---------------- overview ---------------- */
 function renderOverview(){
   const m=model(), now=todayWk();
-  const dsAgreed=TASKS.filter(t=>(taskState(t.id).status||"todo")==="agreed").length;
+  const d=dsProgress();
   const o=openNow();
+  /* Every tile opens the tab it summarises. */
+  const tbtn=(go,k,v,n,cls)=>"<button type=button class='tile "+(cls||"")+"' data-go='"+go+"'><span class=k>"+k+
+    "</span><span class=v>"+v+"</span><span class=n>"+n+"</span></button>";
   el("#ovTiles").innerHTML=
-   tile("Net cash, year one",money(m.netCash),"After the Baby Gift, MediSave and usable CDA","hero")+
-   tile("Support to age 17","$70,000","SG Child Support Package plus MediSave and Edusave","")+
-   tile("Conversations agreed",dsAgreed+" / "+TASKS.length,"In Talk it through","")+
-   tile("Tasks due now",String(o.now+o.earlier),o.earlier?o.now+" in "+o.cur.t+", "+o.earlier+" left from earlier":"Open in "+o.cur.t,"");
+   tbtn("money","Net cash, year one",money(m.netCash),"After the Baby Gift, MediSave and usable CDA","hero")+
+   tbtn("reference/grants","Support to age 17","$70,000","SG Child Support Package plus MediSave and Edusave","")+
+   tbtn("discuss","Conversations agreed",d.agreed+" / "+d.live,"In Talk it through"+(d.parked?", "+d.parked+" parked for later":""),"")+
+   tbtn("timeline/now","Tasks due now",String(o.now+o.earlier),o.earlier?o.now+" in "+o.cur.t+", "+o.earlier+" left from earlier":"Open in "+o.cur.t,"");
+  els("[data-go]",el("#ovTiles")).forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
 
   el("#ovDecisions").innerHTML=[
    ["Hospital",m.h.h+", "+m.h.ward,money(m.delivery),"Range across all options: "+money(HOSP[0].v)+" to "+money(HOSP[HOSP.length-1].v),"reference/hospital"],
@@ -2825,35 +3019,34 @@ function renderOverview(){
    ["Everything you buy",ITEMS.filter(i=>buyTier(i)!=="skip").length+" items selected",money(m.gear),"All budget "+money(ITEMS.reduce((s,i)=>s+(i.b.p||0),0))+" against all premium "+money(ITEMS.reduce((s,i)=>s+(i.p.p||0),0)),"buy"],
    ["Childcare in year one",m.care==="infant"?"Infant care from month "+cfg("careStart"):m.care==="helper"?"Helper from month "+cfg("careStart"):"None costed in year one",money(m.careCost),"Subsidies applied: "+money(m.careSub),"reference/care"],
    ["CDA deposit",money(m.cdaDep)+" of $5,000",money(m.cdaMatch)+" matched","Every dollar you put in is matched, but it can only be spent at approved institutions","money"]
-  ].map(d=>"<div class=card><div style='display:flex;gap:10px;align-items:baseline'><h4 style='flex:1'>"+d[0]+"</h4><span class='num' style='font-size:15px'>"+d[2]+"</span></div>"+
-    "<p class=tiny style='margin-top:4px;color:var(--ink-2)'>"+d[1]+"</p><p class=tiny style='margin-top:6px'>"+d[3]+"</p>"+
-    "<button class=linkbtn data-go='"+d[4]+"' style='margin-top:8px'>Open</button></div>").join("");
+  /* The range and swing explanations live where the choice is made; here
+     the row is the choice, the cost and a way in. */
+  ].map(d=>"<button type=button class=drow data-go='"+d[4]+"' title='"+esc(d[3])+"'><span class=dname>"+d[0]+"</span>"+
+    "<span class=dval>"+d[1]+"</span><span class=num>"+d[2]+"</span></button>").join("");
   els("[data-go]",el("#ovDecisions")).forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
 
-  const cur=o.cur;
-  const open=cur.i.filter(x=>!checked(x[0])).map(x=>x[1]).concat(customFor(cur.id).filter(c=>!c.v.done).map(c=>esc(c.v.text)));
-  const more=open.length-6;
-  el("#ovSnapshot").innerHTML=
-   "<div class=card><h4>Due now: "+cur.t+"</h4><p class=tiny style='margin-top:4px'>"+cur.sub+"</p>"+
-     (open.length?"<ul class='clean tiny' style='margin-top:8px'>"+open.slice(0,6).map(x=>"<li>"+x+"</li>").join("")+"</ul>"+(more>0?"<p class=tiny style='margin-top:4px'>and "+more+" more</p>":""):"<p class=tiny style='margin-top:8px'>Everything in this stage is ticked off.</p>")+
-     (o.earlier?"<p class=tiny style='margin-top:8px;color:var(--crit)'>"+o.earlier+" left over from earlier stages.</p>":"")+
-     "<button class=linkbtn data-go='timeline/now' style='margin-top:8px'>Open the task list</button></div>"+
-   "<div class=card><h4>Conversations not yet settled</h4>"+
-     "<ul class='clean tiny' style='margin-top:8px'>"+TASKS.filter(t=>(taskState(t.id).status||"todo")==="todo").slice(0,6).map(t=>"<li>"+t.t+"</li>").join("")+"</ul>"+
-     "<button class=linkbtn data-go='discuss' style='margin-top:8px'>Open the board</button></div>";
-  els("[data-go]",el("#ovSnapshot")).forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
+  el("#ovPrecon").hidden=o.cur.id!=="pre";
 }
 
 /* ---------------- tabs ---------------- */
 let active="overview";
 /* Progress, not a count of things undone: "0 of 60" on day one reads as a
    backlog someone else created, and the number going down explains nothing. */
+/* Parked conversations are set aside on purpose, not left undone, so they come
+   out of the denominator everywhere progress is shown: 12 of 35 with 5 parked
+   reads as a plan, 12 of 40 reads as a backlog. */
+function dsProgress(){
+  const st=t=>taskState(t.id).status||"todo";
+  const agreed=TASKS.filter(t=>st(t)==="agreed").length;
+  const parked=TASKS.filter(t=>st(t)==="parked").length;
+  return {agreed:agreed,parked:parked,live:TASKS.length-parked};
+}
 function counts(){
   const chosen=ITEMS.filter(i=>buyTier(i)!=="skip");
-  const o=openNow();
+  const o=openNow(), d=dsProgress();
   return {
     tl:(o.now+o.earlier)+" now",
-    ds:TASKS.filter(t=>(taskState(t.id).status||"todo")==="agreed").length+"/"+TASKS.length,
+    ds:d.agreed+"/"+d.live,
     by:chosen.filter(i=>(S.buys[i.id]||{}).bought).length+"/"+chosen.length
   };
 }
@@ -3287,8 +3480,8 @@ function renderShopExtras(){
     if(tier!=="skip"){
       const toggle=document.createElement("button");toggle.className="btn";toggle.textContent="Compare tiers";toggle.setAttribute("aria-expanded","false");card.classList.add("chosen-tier");toggle.onclick=()=>{const on=card.classList.toggle("show-tiers");toggle.textContent=on?"Hide other tiers":"Compare tiers";toggle.setAttribute("aria-expanded",String(on))};box.append(toggle);
     }
-    const item=ITEMS.find(i=>i.id===id), band=item[tier==="budget"?"b":tier==="premium"?"p":"m"];
-    const a=document.createElement("a");a.textContent="Find this item";a.target="_blank";a.rel="noopener";a.href="https://www.google.com/search?q="+encodeURIComponent(band.pick+" Singapore");box.append(a);card.append(box);
+    /* Shares the "See prices" line, so the card is photo, head, why, chosen tier, one tool line. */
+    (card.querySelector(".shoprow")||card).append(box);
   });
 }
 function cashflowPreview(){
@@ -3303,7 +3496,9 @@ function cashflowPreview(){
   els("input",dialog).forEach(i=>i.onchange=render);render();
 }
 function setupEnhancements(){
-  el("#planTools").innerHTML="<div class=tool-row><label class=search-label for=planSearch>Search the plan<input id=planSearch type=search placeholder='Tasks, decisions, shopping, references…'></label><button class=btn id=undoPlan>Undo last change</button></div><div id=searchResults class=card hidden aria-live=polite></div><details id=planSettings><summary>Plan settings &amp; history</summary><button class=btn id=planHistory>Session history</button><div class=tool-row><label>Planning stage <select id=planStage><option value=auto>Use due date (current plan)</option><option value=trying>Trying / planning</option><option value=pregnant>Pregnant</option><option value=born>Baby born</option></select></label><label id=birthWrap hidden>Birth date <input id=birthDate type=date></label></div></details>";
+  el("#planSearchWrap").innerHTML="<label class=sr for=planSearch>Search the plan</label><input id=planSearch type=search placeholder='Search the plan…'><button class=btn id=undoPlan>Undo</button>";
+  el("#planTools").innerHTML="<div id=searchResults class=card hidden aria-live=polite></div>";
+  el("#planFooter").innerHTML="<details id=planSettings><summary>Plan settings &amp; history</summary><button class=btn id=planHistory>Session history</button><div class=tool-row><label>Planning stage <select id=planStage><option value=auto>Use due date (current plan)</option><option value=trying>Trying / planning</option><option value=pregnant>Pregnant</option><option value=born>Baby born</option></select></label><label id=birthWrap hidden>Birth date <input id=birthDate type=date></label></div></details>";
   el("#planSearch").oninput=e=>searchPlan(e.target.value);
   el("#undoPlan").onclick=undoChange;
   el("#planHistory").onclick=()=>chooseDialog("Changes this session",undoStack.length?"<ol>"+undoStack.map(h=>"<li>"+esc(h.at+" · "+h.label)+"</li>").join("")+"</ol><p class=note>History lasts until this page closes. Undo restores the previous plan.</p>":"<p>No changes in this session.</p>",[]);
@@ -3312,7 +3507,6 @@ function setupEnhancements(){
   el("#birthDate").onchange=e=>{if(e.target.value&&e.target.checkValidity())save("settings",{stage:"born",birthDate:e.target.value});else e.target.reportValidity()};
   el("#emergencyExport").onclick=e=>backupNow(e.currentTarget);
   const moneyTools=document.createElement("div");moneyTools.className="tool-row";moneyTools.innerHTML="<button class=btn id=scenarios>Compare a scenario</button><button class=btn id=cashflow>View monthly cash needs</button><a href='https://www.madeforfamilies.gov.sg/ndr-2026-supporting-families' target=_blank rel=noopener>Support policy · checked 10 Sep 2026</a>";el("#moneyTiles").before(moneyTools);el("#scenarios").onclick=()=>editBudget(null);el("#cashflow").onclick=cashflowPreview;
-  const owner=document.createElement("label");owner.className="tool-row";owner.innerHTML="Conversation owner <select id=ownerFilter><option>All</option><option>Her</option><option>Him</option><option>Both</option><option>Unassigned</option></select>";el("#dsFilters").before(owner);el("#ownerFilter").onchange=e=>{dsOwner=e.target.value;renderDiscuss();renderEnhancements()};
   const shop=document.createElement("div");shop.className="tool-row";shop.innerHTML="<label>Shopping view <select id=shoppingView><option value=all>All items</option><option value=remaining>Still to buy</option></select></label><span class=note>Paid amount is the total for the item, across all quantities.</span><span id=shopTotals class=note></span>";el("#byTiles").before(shop);el("#shoppingView").onchange=e=>{buyView=e.target.value;renderBuy();renderEnhancements()};
   window.addEventListener("popstate",e=>{go(location.hash.slice(1)||"overview",true);window.scrollTo(0,e.state?.scrollY||0)});
   document.addEventListener("click",()=>queueMicrotask(()=>{decorateAccessibility();renderEnhancements()}));
